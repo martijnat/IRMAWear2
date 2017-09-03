@@ -53,16 +53,19 @@ public class MainActivity extends WearableActivity {
         //Toast.makeText(MainActivity.this, "Pressed (?) test", Toast.LENGTH_SHORT).show();
     }
 
-    public void WifiInput(String str)
-    {
-        mStatus.setText(str);
+    public void ResetConnect(){
         mProgressbar.setVisibility(View.GONE);
         mButton.setVisibility(View.VISIBLE);
-
-//        mProgressbar.setVisibility(View.VISIBLE);
+        //        mProgressbar.setVisibility(View.VISIBLE);
 //        mButton.setVisibility(View.GONE);
 //        mBackgroundClient = new BackgroundClient(MainActivity.this);
 //        mBackgroundClient.execute();
+    }
+
+    public String WifiInput(String str)
+    {
+        mStatus.setText(str);
+        return "Reply";
 
     }
 

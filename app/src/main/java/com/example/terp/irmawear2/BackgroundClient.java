@@ -30,6 +30,8 @@ public class BackgroundClient  extends AsyncTask<String, Void, String> {
 
     public String message = "";
     private MainActivity mMainActivity;
+    private ServerSocket mServerSocket;
+    private Socket mSocket;
 
     public BackgroundClient(MainActivity m) {
         mMainActivity = m;
@@ -41,26 +43,17 @@ public class BackgroundClient  extends AsyncTask<String, Void, String> {
         String line = "";
         String str = "";
         try {
-            ServerSocket serverSocket = new ServerSocket();
-            serverSocket.setReuseAddress(true);
-            serverSocket.bind(new InetSocketAddress(PORT));
+            mServerSocket = new ServerSocket();
+            mServerSocket.setReuseAddress(true);
+            mServerSocket.bind(new InetSocketAddress(PORT));
 
             // listen for incoming clients
-            Socket socket = serverSocket.accept();
+            mSocket = mServerSocket.accept();
 
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            BufferedReader in = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));
 
             str = in.readLine();
-            out.write(str);
-            out.flush();
-
-            out.close();
-            in.close();
-            socket.close();
-            serverSocket.close();
-
             return str;
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
@@ -71,6 +64,18 @@ public class BackgroundClient  extends AsyncTask<String, Void, String> {
     }
 
     protected void onPostExecute(String result) {
-        mMainActivity.WifiInput(result);
+        try {
+            String reply = mMainActivity.WifiInput(result);
+            BufferedWriter out = null;
+            out = new BufferedWriter(new OutputStreamWriter(mSocket.getOutputStream()));
+            out.write(reply);
+            out.flush();
+            out.close();
+            mSocket.close();
+            mServerSocket.close();
+            mMainActivity.ResetConnect();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
