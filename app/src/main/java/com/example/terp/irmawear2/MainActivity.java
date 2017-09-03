@@ -65,7 +65,7 @@ public class MainActivity extends WearableActivity {
     public String WifiInput(String str)
     {
         mStatus.setText(str);
-        return "Reply";
+        return "Received: " + str + "\n";
 
     }
 
