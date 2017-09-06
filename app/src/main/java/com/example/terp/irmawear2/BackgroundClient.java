@@ -53,7 +53,13 @@ public class BackgroundClient  extends AsyncTask<String, Void, String> {
 
             BufferedReader in = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));
 
-            str = in.readLine();
+            line = in.readLine();
+            while (in.ready())
+                {
+                    str = str + line;
+                    line = in.readLine();
+                }
+
             return str;
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
