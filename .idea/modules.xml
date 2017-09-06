@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/IRMAWear2.iml" filepath="$PROJECT_DIR$/IRMAWear2.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/irma_android_cardemu/irma_android_cardemu.iml" filepath="$PROJECT_DIR$/irma_android_cardemu/irma_android_cardemu.iml" />
     </modules>
   </component>
 </project>

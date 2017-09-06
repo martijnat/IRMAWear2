@@ -1,0 +1,3 @@
+[submodule "irma_android_cardemu"]
+	path = irma_android_cardemu
+	url = https://github.com/credentials/irma_android_cardemu

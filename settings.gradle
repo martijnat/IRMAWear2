@@ -1,1 +1,1 @@
-include ':app'
+include ':app', ':irma_android_cardemu'
