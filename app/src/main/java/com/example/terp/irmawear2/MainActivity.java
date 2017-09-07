@@ -15,6 +15,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.irmacard.api.common.IrmaQr;
+import org.irmacard.api.common.util.GsonUtil;
+import org.json.JSONObject;
+
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -62,10 +66,24 @@ public class MainActivity extends WearableActivity {
 //        mBackgroundClient.execute();
     }
 
-    public String WifiInput(String str)
+    public String WifiInput(String result)
     {
-        mStatus.setText(str);
-        return "Received: " + str + "\n";
+        mStatus.setText(result);
+
+        try {
+            JSONObject jObject = new JSONObject(result);
+            String qrUrl       = jObject.getString("u");
+            String qrVersion   = jObject.getString("v");
+            String qrVersionMax= jObject.getString("vmax");
+            String qrType      = jObject.getString("irmaqr");
+            mStatus.setText(qrUrl + "\n---\n" + qrVersion + "\n---\n" + qrVersionMax +"\n---\n"+qrType);
+
+            return "Received: " + result + "\n";
+        } catch(Exception e) {
+            return e.toString();
+        }
+
+
 
     }
 

@@ -9,7 +9,10 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/credentials_api" />
+            <option value="$PROJECT_DIR$/credentials_idemix" />
             <option value="$PROJECT_DIR$/irma_android_cardemu" />
+            <option value="$PROJECT_DIR$/irma_api_common" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

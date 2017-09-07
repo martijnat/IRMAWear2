@@ -1,3 +1,12 @@
 [submodule "irma_android_cardemu"]
 	path = irma_android_cardemu
 	url = https://github.com/credentials/irma_android_cardemu
+[submodule "irma_api_common"]
+	path = irma_api_common
+	url = https://github.com/credentials/irma_api_common
+[submodule "credentials_idemix"]
+	path = credentials_idemix
+	url = https://github.com/credentials/credentials_idemix
+[submodule "credentials_api"]
+	path = credentials_api
+	url = https://github.com/credentials/credentials_api
