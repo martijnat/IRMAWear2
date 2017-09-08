@@ -15,7 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.irmacard.api.common.IrmaQr;
+// import org.irmacard.api.common.IrmaQr;
 import org.irmacard.api.common.util.GsonUtil;
 import org.json.JSONObject;
 
@@ -77,6 +77,8 @@ public class MainActivity extends WearableActivity {
             String qrVersionMax= jObject.getString("vmax");
             String qrType      = jObject.getString("irmaqr");
             mStatus.setText(qrUrl + "\n---\n" + qrVersion + "\n---\n" + qrVersionMax +"\n---\n"+qrType);
+
+//            new IrmaClient(result, irmaClientHandler);
 
             return "Received: " + result + "\n";
         } catch(Exception e) {
