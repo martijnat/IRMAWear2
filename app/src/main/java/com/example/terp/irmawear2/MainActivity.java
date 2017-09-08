@@ -135,7 +135,7 @@ public class MainActivity extends WearableActivity {
     private boolean descriptionStoreLoaded = false;
     private boolean keyStoreLoaded = false;
 
-    // private IrmaClientHandler irmaClientHandler = new ClientHandler();
+    private IrmaClientHandler irmaClientHandler = new ClientHandler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
