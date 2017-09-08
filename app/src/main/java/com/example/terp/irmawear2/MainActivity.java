@@ -135,7 +135,7 @@ public class MainActivity extends WearableActivity {
     private boolean descriptionStoreLoaded = false;
     private boolean keyStoreLoaded = false;
 
-    private IrmaClientHandler irmaClientHandler = new ClientHandler();
+    // private IrmaClientHandler irmaClientHandler = new ClientHandler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -245,7 +245,7 @@ public class MainActivity extends WearableActivity {
 		// If we're finished booting
 		if (state.isBooting() && credentialsLoaded && descriptionStoreLoaded && keyStoreLoaded) {
 			setState(State.IDLE);
-			processIntent();
+			// processIntent(); TODO UNCOMMENT THIS
 		}
 	}
 
@@ -408,90 +408,90 @@ public class MainActivity extends WearableActivity {
 	}
 
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-		Log.i(TAG, "onPause() called");
+	// @Override
+	// protected void onPause() {
+	// 	super.onPause();
+	// 	Log.i(TAG, "onPause() called");
 
-		settings.edit()
-				.putString("currentSessionUrl", currentSessionUrl)
-				.putBoolean("onlineEnrolling", onlineEnrolling)
-				.putBoolean("launchedFromBrowser", launchedFromBrowser)
-				.apply();
-	}
+	// 	settings.edit()
+	// 			.putString("currentSessionUrl", currentSessionUrl)
+	// 			.putBoolean("onlineEnrolling", onlineEnrolling)
+	// 			.putBoolean("launchedFromBrowser", launchedFromBrowser)
+	// 			.apply();
+	// }
 
-	@Override
-	public void onNewIntent(Intent intent) {
-		setIntent(intent);
-	}
+	// @Override
+	// public void onNewIntent(Intent intent) {
+	// 	setIntent(intent);
+	// }
 
-	@Override
-	protected void onDestroy() {
-		Log.i(TAG, "onDestroy() called");
-		super.onDestroy();
-	}
+	// @Override
+	// protected void onDestroy() {
+	// 	Log.i(TAG, "onDestroy() called");
+	// 	super.onDestroy();
+	// }
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		Log.i(TAG, "onResume() called");
+	// @Override
+	// protected void onResume() {
+	// 	super.onResume();
+	// 	Log.i(TAG, "onResume() called");
 
-		currentSessionUrl = settings.getString("currentSessionUrl", "()");
-		onlineEnrolling = settings.getBoolean("onlineEnrolling", false);
-		launchedFromBrowser = settings.getBoolean("launchedFromBrowser", false);
+	// 	currentSessionUrl = settings.getString("currentSessionUrl", "()");
+	// 	onlineEnrolling = settings.getBoolean("onlineEnrolling", false);
+	// 	launchedFromBrowser = settings.getBoolean("launchedFromBrowser", false);
 
-		if (getState() == State.IDLE) {
-			updateCredentialList();
-			processIntent();
-		}
-	}
+	// 	if (getState() == State.IDLE) {
+	// 		updateCredentialList();
+	// 		processIntent();
+	// 	}
+	// }
 
-	private void processIntent() {
-		Intent intent = getIntent();
-		Log.i(TAG, "processIntent() called, action: " + intent.getAction());
+//	private void processIntent() {
+//		Intent intent = getIntent();
+//		Log.i(TAG, "processIntent() called, action: " + intent.getAction());
+//
+//		String qr = intent.getStringExtra("qr");
+//		if (!intent.getAction().equals(Intent.ACTION_VIEW) || qr == null)
+//			return;
+//
+//		Log.i(TAG, "Received qr in intent: " + qr);
+//		if(qr.equals(currentSessionUrl)) {
+//			Log.i(TAG, "Already processed this qr, ignoring");
+//			return;
+//		}
+//
+//		currentSessionUrl = qr;
+//		launchedFromBrowser = true;
+//		new IrmaClient(qr, irmaClientHandler);
+//	}
 
-		String qr = intent.getStringExtra("qr");
-		if (!intent.getAction().equals(Intent.ACTION_VIEW) || qr == null)
-			return;
+	// public void onMainShapeTouch(View v) {
+	// 	if (getState() != State.IDLE)
+	// 		return;
 
-		Log.i(TAG, "Received qr in intent: " + qr);
-		if(qr.equals(currentSessionUrl)) {
-			Log.i(TAG, "Already processed this qr, ignoring");
-			return;
-		}
+	// 	if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+	// 			== PackageManager.PERMISSION_DENIED) {
+	// 		ActivityCompat.requestPermissions(this,
+	// 				new String[] { Manifest.permission.CAMERA }, PERMISSION_REQUEST_CAMERA);
+	// 	}
+	// 	else {
+	// 		startQRScanner(getString(R.string.scan_qr));
+	// 	}
+	// }
 
-		currentSessionUrl = qr;
-		launchedFromBrowser = true;
-		new IrmaClient(qr, irmaClientHandler);
-	}
-
-	public void onMainShapeTouch(View v) {
-		if (getState() != State.IDLE)
-			return;
-
-		if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-				== PackageManager.PERMISSION_DENIED) {
-			ActivityCompat.requestPermissions(this,
-					new String[] { Manifest.permission.CAMERA }, PERMISSION_REQUEST_CAMERA);
-		}
-		else {
-			startQRScanner(getString(R.string.scan_qr));
-		}
-	}
-
-	@Override
-	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-	                                       @NonNull int[] grantResults) {
-		switch (requestCode) {
-			case PERMISSION_REQUEST_CAMERA:
-				if (grantResults.length > 0
-						&& grantResults[0] == PackageManager.PERMISSION_GRANTED
-						&& permissions[0].equals(Manifest.permission.CAMERA)) {
-					startQRScanner(getString(R.string.scan_qr));
-				}
-				break;
-		}
-	}
+	// @Override
+	// public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+	//                                        @NonNull int[] grantResults) {
+	// 	switch (requestCode) {
+	// 		case PERMISSION_REQUEST_CAMERA:
+	// 			if (grantResults.length > 0
+	// 					&& grantResults[0] == PackageManager.PERMISSION_GRANTED
+	// 					&& permissions[0].equals(Manifest.permission.CAMERA)) {
+	// 				startQRScanner(getString(R.string.scan_qr));
+	// 			}
+	// 			break;
+	// 	}
+	// }
 
 	public void onOnlineEnrollButtonTouch(View v) {
 		onlineEnrolling = true;
@@ -500,110 +500,110 @@ public class MainActivity extends WearableActivity {
 		startActivity(i);
 	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
+	// @Override
+	// protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	// 	super.onActivityResult(requestCode, resultCode, data);
 
-		if (requestCode == CredentialDetailActivity.ACTIVITY_CODE && resultCode == CredentialDetailActivity.RESULT_DELETE) {
-			int hashCode = data.getIntExtra(CredentialDetailActivity.ARG_RESULT_DELETE, 0);
-			if (hashCode != 0)
-				tryDeleteCredential(hashCode);
-		}
+	// 	if (requestCode == CredentialDetailActivity.ACTIVITY_CODE && resultCode == CredentialDetailActivity.RESULT_DELETE) {
+	// 		int hashCode = data.getIntExtra(CredentialDetailActivity.ARG_RESULT_DELETE, 0);
+	// 		if (hashCode != 0)
+	// 			tryDeleteCredential(hashCode);
+	// 	}
 
-		else if (requestCode == IRMAPreferenceActivity.ACTIVITY_CODE) {
-			if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("allow_screenshots", false))
-				getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
-			else
-				getWindow().setFlags(
-						WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
-		}
+	// 	else if (requestCode == IRMAPreferenceActivity.ACTIVITY_CODE) {
+	// 		if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("allow_screenshots", false))
+	// 			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+	// 		else
+	// 			getWindow().setFlags(
+	// 					WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+	// 	}
 
-		else { // Must be from the QR scanner
-			IntentResult scanResult = IntentIntegrator
-					.parseActivityResult(requestCode, resultCode, data);
+	// 	else { // Must be from the QR scanner
+	// 		IntentResult scanResult = IntentIntegrator
+	// 				.parseActivityResult(requestCode, resultCode, data);
 
-			// Process the results from the QR-scanning activity
-			if (scanResult == null)
-				return;
-			String contents = scanResult.getContents();
-			if (contents == null)
-				return;
+	// 		// Process the results from the QR-scanning activity
+	// 		if (scanResult == null)
+	// 			return;
+	// 		String contents = scanResult.getContents();
+	// 		if (contents == null)
+	// 			return;
 
-			IrmaQr qr;
-			try {
-				qr = GsonUtil.getGson().fromJson(contents, IrmaQr.class);
-			} catch(Exception e) {
-				irmaClientHandler.onFailure(IrmaClient.Action.UNKNOWN, "Not an IRMA session", null, "Content: " + contents);
-				return;
-			}
+	// 		IrmaQr qr;
+	// 		try {
+	// 			qr = GsonUtil.getGson().fromJson(contents, IrmaQr.class);
+	// 		} catch(Exception e) {
+	// 			irmaClientHandler.onFailure(IrmaClient.Action.UNKNOWN, "Not an IRMA session", null, "Content: " + contents);
+	// 			return;
+	// 		}
 
-			String qrType = qr.getType();
-			if (qrType == null) qrType = "";
-			switch (qrType) {
-				case "schememanager":
-					Log.i(TAG, "Adding new scheme manager from qr code!");
-					SchemeManagerHandler.confirmAndDownloadManager(
-							GsonUtil.getGson().fromJson(contents, SchemeManagerQr.class).getUrl(), this,
-							new Runnable() {
-								@Override public void run() {
-									updateCredentialList(false);
-								}
-							});
-					break;
-				case "disclosing":
-				case "signing":
-				case "issuing":
-				default:
-					launchedFromBrowser = false;
-					onlineEnrolling = false;
-					new IrmaClient(contents, irmaClientHandler);
-					break;
-			}
-		}
-	}
+	// 		String qrType = qr.getType();
+	// 		if (qrType == null) qrType = "";
+	// 		switch (qrType) {
+	// 			case "schememanager":
+	// 				Log.i(TAG, "Adding new scheme manager from qr code!");
+	// 				SchemeManagerHandler.confirmAndDownloadManager(
+	// 						GsonUtil.getGson().fromJson(contents, SchemeManagerQr.class).getUrl(), this,
+	// 						new Runnable() {
+	// 							@Override public void run() {
+	// 								updateCredentialList(false);
+	// 							}
+	// 						});
+	// 				break;
+	// 			case "disclosing":
+	// 			case "signing":
+	// 			case "issuing":
+	// 			default:
+	// 				launchedFromBrowser = false;
+	// 				onlineEnrolling = false;
+	// 				new IrmaClient(contents, irmaClientHandler);
+	// 				break;
+	// 		}
+	// 	}
+	// }
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_main, menu);
-		return true;
-	}
+	// @Override
+	// public boolean onCreateOptionsMenu(Menu menu) {
+	// 	// Inflate the menu; this adds items to the action bar if it is present.
+	// 	getMenuInflater().inflate(R.menu.activity_main, menu);
+	// 	return true;
+	// }
 
-	public void startQRScanner(String message) {
-		IntentIntegrator integrator = new IntentIntegrator(this);
-		integrator.setPrompt(message);
-		integrator.initiateScan();
-	}
+	// public void startQRScanner(String message) {
+	// 	IntentIntegrator integrator = new IntentIntegrator(this);
+	// 	integrator.setPrompt(message);
+	// 	integrator.initiateScan();
+	// }
 
-	@Override
-	public void onBackPressed() {
-		// When we are not in IDLE state, return there
-		if (getState() != State.IDLE) {
-			if (cdt != null)
-				cdt.cancel();
+	// @Override
+	// public void onBackPressed() {
+	// 	// When we are not in IDLE state, return there
+	// 	if (getState() != State.IDLE) {
+	// 		if (cdt != null)
+	// 			cdt.cancel();
 
-			setState(State.IDLE);
-			clearFeedback();
-		} else {
-			// We are in Idle, do what we always do
-			super.onBackPressed();
-		}
-	}
+	// 		setState(State.IDLE);
+	// 		clearFeedback();
+	// 	} else {
+	// 		// We are in Idle, do what we always do
+	// 		super.onBackPressed();
+	// 	}
+	// }
 
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		if (!CredentialManager.getUnEnrolledKSSes().isEmpty()){
-			menu.findItem(R.id.menu_reregister).setVisible(true);
-			menu.findItem(R.id.menu_clear).setVisible(false);
-		} else {
-			menu.findItem(R.id.menu_reregister).setVisible(false);
-			menu.findItem(R.id.menu_clear).setVisible(true);
-		}
-		menu.findItem(R.id.menu_manual_session).setVisible(BuildConfig.DEBUG);
-		menu.findItem(R.id.menu_delete_everything).setVisible(BuildConfig.DEBUG);
-		menu.findItem(R.id.online_enroll).setVisible(BuildConfig.DEBUG);
-		return true;
-	}
+	// @Override
+	// public boolean onPrepareOptionsMenu(Menu menu) {
+	// 	if (!CredentialManager.getUnEnrolledKSSes().isEmpty()){
+	// 		menu.findItem(R.id.menu_reregister).setVisible(true);
+	// 		menu.findItem(R.id.menu_clear).setVisible(false);
+	// 	} else {
+	// 		menu.findItem(R.id.menu_reregister).setVisible(false);
+	// 		menu.findItem(R.id.menu_clear).setVisible(true);
+	// 	}
+	// 	menu.findItem(R.id.menu_manual_session).setVisible(BuildConfig.DEBUG);
+	// 	menu.findItem(R.id.menu_delete_everything).setVisible(BuildConfig.DEBUG);
+	// 	menu.findItem(R.id.online_enroll).setVisible(BuildConfig.DEBUG);
+	// 	return true;
+	// }
 
 //	COMMENTED OUT DUE TO COMPILATION ERRORS
 //	@Override
@@ -691,21 +691,21 @@ public class MainActivity extends WearableActivity {
 		}
 	}
 
-	private void startManualSession() {
-		final EditText inputbox = new EditText(this);
-		inputbox.setHint(R.string.qr_code_contents);
-
-		new AlertDialog.Builder(this)
-				.setTitle(R.string.manually_start_session)
-				.setView(inputbox)
-				.setPositiveButton(R.string.start, new DialogInterface.OnClickListener() {
-					@Override public void onClick(DialogInterface dialog, int whichButton) {
-						new IrmaClient(inputbox.getText().toString(), irmaClientHandler);
-					}
-				})
-				.setNegativeButton(android.R.string.cancel, null)
-				.show();
-	}
+//	private void startManualSession() {
+//		final EditText inputbox = new EditText(this);
+//		inputbox.setHint(R.string.qr_code_contents);
+//
+//		new AlertDialog.Builder(this)
+//				.setTitle(R.string.manually_start_session)
+//				.setView(inputbox)
+//				.setPositiveButton(R.string.start, new DialogInterface.OnClickListener() {
+//					@Override public void onClick(DialogInterface dialog, int whichButton) {
+//						new IrmaClient(inputbox.getText().toString(), irmaClientHandler);
+//					}
+//				})
+//				.setNegativeButton(android.R.string.cancel, null)
+//				.show();
+//	}
 
 	// Classes handling (integration with) other components of the app
 
