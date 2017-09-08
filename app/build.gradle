@@ -42,4 +42,5 @@ dependencies {
     compile project(path: ':credentials_idemix')
     compile project(path: ':credentials_api')
 //    compile project(path: ':irma_android_cardemu')
+    compile project(path: ':irma_android_cardemu')
 }

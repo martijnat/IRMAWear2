@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 // import org.irmacard.api.common.IrmaQr;
 import org.irmacard.api.common.util.GsonUtil;
+import org.irmacard.cardemu.irmaclient.IrmaClient;
 import org.json.JSONObject;
 
 import java.net.InetAddress;
@@ -78,7 +79,7 @@ public class MainActivity extends WearableActivity {
             String qrType      = jObject.getString("irmaqr");
             mStatus.setText(qrUrl + "\n---\n" + qrVersion + "\n---\n" + qrVersionMax +"\n---\n"+qrType);
 
-//            new IrmaClient(result, irmaClientHandler);
+            //new IrmaClient(result, irmaClientHandler);
 
             return "Received: " + result + "\n";
         } catch(Exception e) {
