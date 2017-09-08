@@ -167,24 +167,32 @@ public class MainActivity extends WearableActivity {
         //        mBackgroundClient.execute();
     }
 
+    public void StatusAppend(String str){
+        String sep = "\n---\n";
+        mStatus.setText(mStatus.getText()+sep + str);
+
+
+
+    }
+
     public String WifiInput(String result)
     {
         mStatus.setText(result);
 
         try {
             JSONObject jObject = new JSONObject(result);
-            String qrUrl       = jObject.getString("u");
-            String qrVersion   = jObject.getString("v");
-            String qrVersionMax= jObject.getString("vmax");
-            String qrType      = jObject.getString("irmaqr");
-            mStatus.setText(qrUrl + "\n---\n" + qrVersion + "\n---\n" + qrVersionMax +"\n---\n"+qrType);
-
-            new IrmaClient(result, irmaClientHandler);
-
-            return "Received: " + result + "\n";
+            StatusAppend(jObject.getString("u"));
+            StatusAppend(jObject.getString("v"));
+            StatusAppend(jObject.getString("vmax"));
+            StatusAppend(jObject.getString("irmaqr"));
+               new IrmaClient(result, irmaClientHandler);
         } catch(Exception e) {
-            return e.toString();
+            StatusAppend(e.toString());
         }
+
+
+        return "Received: " + result + "\n";
+
 
 
 
@@ -216,7 +224,8 @@ public class MainActivity extends WearableActivity {
 			});
 		}
 
-		builder.show();
+		// builder.show();
+                StatusAppend("//builder.show()");
 	}
 
 	private State getState() {
@@ -281,9 +290,10 @@ public class MainActivity extends WearableActivity {
 				break;
 		}
 
-		((TextView) findViewById(R.id.status_text)).setText(statusTextResource);
-		if (!showingFeedback)
-			((ImageView) findViewById(R.id.statusimage)).setImageResource(imageResource);
+		// ((TextView) findViewById(R.id.status_text)).setText(statusTextResource);
+                StatusAppend(Integer.toString(statusTextResource));
+		// if (!showingFeedback)
+		// 	((ImageView) findViewById(R.id.statusimage)).setImageResource(imageResource);
 	}
 
 	public void setFeedback(String message, String state) {
@@ -301,12 +311,13 @@ public class MainActivity extends WearableActivity {
 			imageResource = R.drawable.irma_icon_missing_520px;
 		}
 
-		((TextView) findViewById(R.id.feedback_text)).setText(message);
+		// ((TextView) findViewById(R.id.feedback_text)).setText(message);
+                StatusAppend(message);
 
-		if (imageResource != 0) {
-			((ImageView) findViewById(R.id.statusimage)).setImageResource(imageResource);
-			showingFeedback = true;
-		}
+		// if (imageResource != 0) {
+		// 	((ImageView) findViewById(R.id.statusimage)).setImageResource(imageResource);
+		// 	showingFeedback = true;
+		// }
 
 		if (cdt != null)
 			cdt.cancel();
@@ -323,7 +334,8 @@ public class MainActivity extends WearableActivity {
 
 	private void clearFeedback() {
 		showingFeedback = false;
-		((TextView) findViewById(R.id.feedback_text)).setText("");
+		// ((TextView) findViewById(R.id.feedback_text)).setText("");
+                StatusAppend("clearfeedback()");
 		setUIForState();
 	}
 
@@ -350,7 +362,8 @@ public class MainActivity extends WearableActivity {
 					+ " " + getString(R.string.confirm_delete_all_kss));
 		}
 
-		builder.show();
+		// builder.show();
+                StatusAppend("//builder.show()");
 	}
 
 	protected void tryDeleteCredential(int hashCode) {
