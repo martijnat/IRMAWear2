@@ -208,28 +208,32 @@ public class MainActivity extends WearableActivity {
 
 	private void showErrorDialog(final String title, final String message,
 	                             final String techInfo, final boolean showingTechInfo) {
-		String m = message;
-		if (showingTechInfo && techInfo != null)
-			m += ". " + techInfo;
+            LogUI("showErrorDialog: [title] " + title);
+            LogUI("showErrorDialog: [message] " + message);
+            LogUI("showErrorDialog: [techInfo] " + techInfo);
+            LogUI("showErrorDialog: [showingTechInfo] " + Boolean.toString(showingTechInfo));
+		// String m = message;
+		// if (showingTechInfo && techInfo != null)
+		// 	m += ". " + techInfo;
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
-				.setIcon(R.drawable.irma_error)
-				.setTitle(title)
-				.setMessage(m)
-				.setPositiveButton(R.string.dismiss, null);
+		// AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
+		// 		.setIcon(R.drawable.irma_error)
+		// 		.setTitle(title)
+		// 		.setMessage(m)
+		// 		.setPositiveButton(R.string.dismiss, null);
 
-		if (techInfo != null) {
-			int buttonText = showingTechInfo ? R.string.lessinfo : R.string.techinfo;
-			builder.setNeutralButton(buttonText, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialogInterface, int i) {
-					showErrorDialog(title, message, techInfo, !showingTechInfo);
-				}
-			});
-		}
+		// if (techInfo != null) {
+		// 	int buttonText = showingTechInfo ? R.string.lessinfo : R.string.techinfo;
+		// 	builder.setNeutralButton(buttonText, new DialogInterface.OnClickListener() {
+		// 		@Override
+		// 		public void onClick(DialogInterface dialogInterface, int i) {
+		// 			showErrorDialog(title, message, techInfo, !showingTechInfo);
+		// 		}
+		// 	});
+		// }
 
-		// builder.show();
-                LogUI("Line 228: //builder.show()");
+		// // builder.show();
+                // LogUI("Line 228: //builder.show()");
 	}
 
 	private State getState() {
