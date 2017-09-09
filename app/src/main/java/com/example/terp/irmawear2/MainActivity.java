@@ -80,6 +80,7 @@ public class MainActivity extends WearableActivity {
 
 
     public TextView mStatus;
+    public TextView mLog;
     public ProgressBar mProgressbar;
     public Button mButton;
 
@@ -144,6 +145,7 @@ public class MainActivity extends WearableActivity {
         setAmbientEnabled();
 
         mStatus = (TextView) findViewById(R.id.status);
+        mLog = (TextView) findViewById(R.id.log);
         mProgressbar = (ProgressBar) findViewById(R.id.progressBar);
         mButton = (Button) findViewById(R.id.connectButton);
 
@@ -152,7 +154,7 @@ public class MainActivity extends WearableActivity {
     public void ClickConnect(View view) {
         mProgressbar.setVisibility(View.VISIBLE);
         mButton.setVisibility(View.GONE);
-        mStatus.setText("Waiting ...");
+        mStatus.setText("Listening ...");
         mBackgroundClient = new BackgroundClient(MainActivity.this);
         mBackgroundClient.execute();
         //Toast.makeText(MainActivity.this, "Pressed (?) test", Toast.LENGTH_SHORT).show();
@@ -167,29 +169,30 @@ public class MainActivity extends WearableActivity {
         //        mBackgroundClient.execute();
     }
 
-    public void StatusAppend(String str){
-        String sep = "\n---\n";
-        mStatus.setText(mStatus.getText()+sep + str);
+    public void LogUI(String str){
+        String sep = "\n";
+        mLog.setText(mLog.getText()+sep + str);
 
-
+    }
+    public void SetStatus(String str){
+        mStatus.setText(str);
 
     }
 
     public String WifiInput(String result)
     {
-        mStatus.setText(result);
+        SetStatus("Processing input ...");
 
         try {
+            LogUI("Processing input as JSON");
             JSONObject jObject = new JSONObject(result);
-            StatusAppend(jObject.getString("u"));
-            StatusAppend(jObject.getString("v"));
-            StatusAppend(jObject.getString("vmax"));
-            StatusAppend(jObject.getString("irmaqr"));
-               new IrmaClient(result, irmaClientHandler);
+            LogUI("Creating new IrmaClient Object");
+            new IrmaClient(result, irmaClientHandler);
         } catch(Exception e) {
-            StatusAppend(e.toString());
+            LogUI("Exception while processing input in WifiInput()\n" + e.toString());
         }
 
+        LogUI("Finished processing WifiInput()\n");
 
         return "Received: " + result + "\n";
 
@@ -225,7 +228,7 @@ public class MainActivity extends WearableActivity {
 		}
 
 		// builder.show();
-                StatusAppend("//builder.show()");
+                LogUI("Line 228: //builder.show()");
 	}
 
 	private State getState() {
@@ -291,7 +294,7 @@ public class MainActivity extends WearableActivity {
 		}
 
 		// ((TextView) findViewById(R.id.status_text)).setText(statusTextResource);
-                StatusAppend(Integer.toString(statusTextResource));
+                LogUI("Line 294: "+Integer.toString(statusTextResource));
 		// if (!showingFeedback)
 		// 	((ImageView) findViewById(R.id.statusimage)).setImageResource(imageResource);
 	}
@@ -312,7 +315,7 @@ public class MainActivity extends WearableActivity {
 		}
 
 		// ((TextView) findViewById(R.id.feedback_text)).setText(message);
-                StatusAppend(message);
+                LogUI("Line 315: "+message);
 
 		// if (imageResource != 0) {
 		// 	((ImageView) findViewById(R.id.statusimage)).setImageResource(imageResource);
@@ -335,7 +338,7 @@ public class MainActivity extends WearableActivity {
 	private void clearFeedback() {
 		showingFeedback = false;
 		// ((TextView) findViewById(R.id.feedback_text)).setText("");
-                StatusAppend("clearfeedback()");
+                LogUI("Line 338: clearfeedback()");
 		setUIForState();
 	}
 
@@ -363,7 +366,7 @@ public class MainActivity extends WearableActivity {
 		}
 
 		// builder.show();
-                StatusAppend("//builder.show()");
+                LogUI("Line 366: //builder.show()");
 	}
 
 	protected void tryDeleteCredential(int hashCode) {
@@ -635,7 +638,7 @@ public class MainActivity extends WearableActivity {
 //				return true;
 //			case R.id.show_card_log:
 //				Log.d(TAG, "show_card_log pressed");
-//				ArrayList<LogEntry> logs = new ArrayList<>(CredentialManager.getLog());
+//				ArrayList<LogEntry> logs = new ArrayList<>(CredentialManager.getLogUI());
 //				logs = new ArrayList<>(logs.subList(0, Math.min(logs.size(), 250)));
 //				Intent logIntent = new Intent(this, LogActivity.class);
 //				logIntent.putExtra(LogFragment.ARG_LOG, logs);
