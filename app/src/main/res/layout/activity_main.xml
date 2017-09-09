@@ -34,7 +34,7 @@
           android:layout_marginBottom="-65dp"
           android:src="@drawable/whiteshaperounded"
           android:padding="5dp"/>
-          <!-- android:onClick="onMainShapeTouch" -->
+      <!-- android:onClick="onMainShapeTouch" -->
 
       <ImageView
           android:id="@+id/irmaLogo"
@@ -59,6 +59,21 @@
           android:layout_margin="30dp"
           />
 
+      <TextView
+          android:id="@+id/error"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="@color/primary_light"
+          android:text="Error: test"
+          app:layout_box="all"
+          android:visibility="gone"
+          android:layout_gravity="center"
+          android:layout_marginLeft="5dp"
+          android:layout_marginTop="-15dp"
+          android:layout_marginRight="5dp"
+          android:layout_marginBottom="0dp"
+          />
+
       <Button
           android:id="@+id/connectButton"
           android:layout_width="wrap_content"
@@ -73,15 +88,6 @@
           android:layout_gravity="center"
           />
 
-      <ProgressBar
-          android:id="@+id/progressBar"
-          style="?android:attr/progressBarStyle"
-          android:visibility="gone"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:indeterminateTint="@color/primary_dark"
-          android:layout_margin="0dp"/>
-
       <TextView
           android:id="@+id/status"
           android:layout_width="wrap_content"
@@ -93,6 +99,14 @@
           android:layout_margin="10dp"
           />
 
+      <ProgressBar
+          android:id="@+id/progressBar"
+          style="?android:attr/progressBarStyle"
+          android:visibility="gone"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:indeterminateTint="@color/primary_dark"
+          android:layout_margin="0dp"/>
 
       <TextView
           android:id="@+id/log"
@@ -106,9 +120,10 @@
           android:layout_gravity="center"
           android:layout_marginLeft="5dp"
           android:layout_marginRight="5dp"
-          android:layout_marginTop="30dp"
+          android:layout_marginTop="80dp"
           android:fontFamily="monospace"
           />
+      <!-- android:visibility="gone" -->
 
     </LinearLayout>
   </ScrollView>

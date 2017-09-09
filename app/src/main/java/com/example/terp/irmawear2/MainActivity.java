@@ -80,6 +80,7 @@ public class MainActivity extends WearableActivity {
 
 
     public TextView mStatus;
+    public TextView mError;
     public TextView mLog;
     public ProgressBar mProgressbar;
     public Button mButton;
@@ -145,6 +146,7 @@ public class MainActivity extends WearableActivity {
         setAmbientEnabled();
 
         mStatus = (TextView) findViewById(R.id.status);
+        mError = (TextView) findViewById(R.id.error);
         mLog = (TextView) findViewById(R.id.log);
         mProgressbar = (ProgressBar) findViewById(R.id.progressBar);
         mButton = (Button) findViewById(R.id.connectButton);
@@ -154,7 +156,8 @@ public class MainActivity extends WearableActivity {
     public void ClickConnect(View view) {
         mProgressbar.setVisibility(View.VISIBLE);
         mButton.setVisibility(View.GONE);
-        mStatus.setText("Listening ...");
+		SetError("");
+        SetStatus("Listening ...");
         mBackgroundClient = new BackgroundClient(MainActivity.this);
         mBackgroundClient.execute();
         //Toast.makeText(MainActivity.this, "Pressed (?) test", Toast.LENGTH_SHORT).show();
@@ -162,7 +165,7 @@ public class MainActivity extends WearableActivity {
 
     public void ResetConnect(){
         mProgressbar.setVisibility(View.GONE);
-        mButton.setVisibility(View.VISIBLE);
+        // mButton.setVisibility(View.VISIBLE);
         //        mProgressbar.setVisibility(View.VISIBLE);
         //        mButton.setVisibility(View.GONE);
         //        mBackgroundClient = new BackgroundClient(MainActivity.this);
@@ -176,6 +179,17 @@ public class MainActivity extends WearableActivity {
     }
     public void SetStatus(String str){
         mStatus.setText(str);
+
+    }
+
+    public void SetError(String str){
+		if (str.length()>0) {
+			mError.setText(str);
+			mError.setVisibility(View.VISIBLE);
+		}
+		else{
+			mError.setVisibility(View.GONE);
+		}
 
     }
 
@@ -212,6 +226,7 @@ public class MainActivity extends WearableActivity {
             LogUI("showErrorDialog: [message] " + message);
             LogUI("showErrorDialog: [techInfo] " + techInfo);
             LogUI("showErrorDialog: [showingTechInfo] " + Boolean.toString(showingTechInfo));
+            SetError(title + ": " + message + "\n" + techInfo);
 		// String m = message;
 		// if (showingTechInfo && techInfo != null)
 		// 	m += ". " + techInfo;
@@ -278,21 +293,26 @@ public class MainActivity extends WearableActivity {
 				imageResource = R.drawable.irma_icon_place_card_520px;
 				statusTextResource = R.string.loading;
                                 LogUI("statusTextResource = R.string.loading;");
+                                SetStatus("Key Store Loaded");
 				break;
 			case IDLE:
 				imageResource = R.drawable.irma_icon_place_card_520px;
 				statusTextResource = R.string.status_idle;
                                 LogUI("statusTextResource = R.string.status_idle;");
+                                SetStatus("");
+                                mButton.setVisibility(View.VISIBLE);
 				break;
 			case CONNECTED:
 				imageResource = R.drawable.irma_icon_place_card_520px;
 				statusTextResource = R.string.status_connected;
                                 LogUI("statusTextResource = R.string.status_connected;");
+                                SetStatus("Connected");
 				break;
 			case READY:
 				imageResource = R.drawable.irma_icon_card_found_520px;
 				statusTextResource = R.string.status_ready;
                                 LogUI("statusTextResource = R.string.status_ready;");
+                                SetStatus("Ready");
 				break;
 			case COMMUNICATING:
 				imageResource = R.drawable.irma_icon_card_found_520px;
