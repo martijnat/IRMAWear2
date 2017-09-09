@@ -190,6 +190,7 @@ public class MainActivity extends WearableActivity {
             new IrmaClient(result, irmaClientHandler);
         } catch(Exception e) {
             LogUI("Exception while processing input in WifiInput()\n" + e.toString());
+            SetStatus(e.toString());
         }
 
         LogUI("Finished processing WifiInput()\n");
@@ -272,22 +273,28 @@ public class MainActivity extends WearableActivity {
 			case KEY_STORE_LOADED:
 				imageResource = R.drawable.irma_icon_place_card_520px;
 				statusTextResource = R.string.loading;
+                                LogUI("statusTextResource = R.string.loading;");
 				break;
 			case IDLE:
 				imageResource = R.drawable.irma_icon_place_card_520px;
 				statusTextResource = R.string.status_idle;
+                                LogUI("statusTextResource = R.string.status_idle;");
 				break;
 			case CONNECTED:
 				imageResource = R.drawable.irma_icon_place_card_520px;
 				statusTextResource = R.string.status_connected;
+                                LogUI("statusTextResource = R.string.status_connected;");
 				break;
 			case READY:
 				imageResource = R.drawable.irma_icon_card_found_520px;
 				statusTextResource = R.string.status_ready;
+                                LogUI("statusTextResource = R.string.status_ready;");
 				break;
 			case COMMUNICATING:
 				imageResource = R.drawable.irma_icon_card_found_520px;
 				statusTextResource = R.string.status_communicating;
+                                LogUI("statusTextResource = R.string.status_communicating;");
+                                SetStatus("Communicating ...");
 				break;
 			default:
 				break;
@@ -315,7 +322,8 @@ public class MainActivity extends WearableActivity {
 		}
 
 		// ((TextView) findViewById(R.id.feedback_text)).setText(message);
-                LogUI("Line 315: "+message);
+                LogUI("Line 315: " + state + ": " + message);
+                SetStatus(state + ": " + message);
 
 		// if (imageResource != 0) {
 		// 	((ImageView) findViewById(R.id.statusimage)).setImageResource(imageResource);
