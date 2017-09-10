@@ -42,6 +42,34 @@ public class BackgroundClient  extends AsyncTask<String, Void, String> {
         String message = "";
         String line = "";
         String str = "";
+
+        // Test connection to api server
+        try{
+            Log.e("TESTCONNECTION","0");
+            Socket s = new Socket("192.168.12.1", 8081);
+            Log.e("TESTCONNECTION","1");
+            BufferedWriter tout = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
+            Log.e("TESTCONNECTION","2");
+            String tmsg="test";
+            Log.e("TESTCONNECTION","3");
+            tout.write(tmsg);
+            Log.e("TESTCONNECTION","4");
+            tout.flush();
+            Log.e("TESTCONNECTION","5");
+//            BufferedReader tinput = new BufferedReader(new InputStreamReader(s.getInputStream()));
+            Log.e("TESTCONNECTION","6");
+//            String st = tinput.readLine();
+            Log.e("TESTCONNECTION","7");
+//            Log.e("TESTCONNECTIONT",st);
+            Log.e("TESTCONNECTION","8");
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage());
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
+
+
+
         try {
             mServerSocket = new ServerSocket();
             mServerSocket.setReuseAddress(true);
