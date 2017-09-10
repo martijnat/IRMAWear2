@@ -122,8 +122,9 @@
           android:layout_marginRight="5dp"
           android:layout_marginTop="100dp"
           android:fontFamily="monospace"
+          android:visibility="gone"
           />
-      <!-- android:visibility="gone" -->
+
 
     </LinearLayout>
   </ScrollView>

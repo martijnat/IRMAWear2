@@ -87,6 +87,8 @@ public class MainActivity extends WearableActivity {
 
     private BackgroundClient mBackgroundClient;
 
+	public static Boolean DEBUGUI = true;
+
     // variable from android app
     private static final String TAG = "SmartWatchMainActivity";
     private static final String SETTINGS = "cardemu";
@@ -151,6 +153,11 @@ public class MainActivity extends WearableActivity {
         mProgressbar = (ProgressBar) findViewById(R.id.progressBar);
         mButton = (Button) findViewById(R.id.connectButton);
 
+		if (DEBUGUI)
+		{
+			mLog.setVisibility(View.VISIBLE);
+		}
+
     }
 
     public void ClickConnect(View view) {
@@ -206,7 +213,7 @@ public class MainActivity extends WearableActivity {
             WifiManager wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             wifiManager.setWifiEnabled(true);
 
-            new IrmaClient(result, irmaClientHandler);1
+            new IrmaClient(result, irmaClientHandler);
         } catch(Exception e) {
             LogUI("Exception while processing input in WifiInput()\n" + e.toString());
             SetStatus(e.toString());
