@@ -201,6 +201,11 @@ public class MainActivity extends WearableActivity {
             LogUI("Processing input as JSON");
             JSONObject jObject = new JSONObject(result);
             LogUI("Creating new IrmaClient Object");
+
+            LogUI("Turning on WiFi");
+            WifiManager wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+            wifiManager.setWifiEnabled(true);
+
             new IrmaClient(result, irmaClientHandler);
         } catch(Exception e) {
             LogUI("Exception while processing input in WifiInput()\n" + e.toString());
