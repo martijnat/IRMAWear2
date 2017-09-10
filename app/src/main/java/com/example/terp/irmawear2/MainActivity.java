@@ -206,7 +206,7 @@ public class MainActivity extends WearableActivity {
             WifiManager wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             wifiManager.setWifiEnabled(true);
 
-            new IrmaClient(result, irmaClientHandler);
+            new IrmaClient(result, irmaClientHandler);1
         } catch(Exception e) {
             LogUI("Exception while processing input in WifiInput()\n" + e.toString());
             SetStatus(e.toString());
@@ -554,66 +554,66 @@ public class MainActivity extends WearableActivity {
 	}
 
 	// @Override
-	// protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	// 	super.onActivityResult(requestCode, resultCode, data);
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
 
-	// 	if (requestCode == CredentialDetailActivity.ACTIVITY_CODE && resultCode == CredentialDetailActivity.RESULT_DELETE) {
-	// 		int hashCode = data.getIntExtra(CredentialDetailActivity.ARG_RESULT_DELETE, 0);
-	// 		if (hashCode != 0)
-	// 			tryDeleteCredential(hashCode);
-	// 	}
+		if (requestCode == CredentialDetailActivity.ACTIVITY_CODE && resultCode == CredentialDetailActivity.RESULT_DELETE) {
+			int hashCode = data.getIntExtra(CredentialDetailActivity.ARG_RESULT_DELETE, 0);
+			if (hashCode != 0)
+				tryDeleteCredential(hashCode);
+		}
 
-	// 	else if (requestCode == IRMAPreferenceActivity.ACTIVITY_CODE) {
-	// 		if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("allow_screenshots", false))
-	// 			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
-	// 		else
-	// 			getWindow().setFlags(
-	// 					WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
-	// 	}
+		else if (requestCode == IRMAPreferenceActivity.ACTIVITY_CODE) {
+			if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("allow_screenshots", false))
+				getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+			else
+				getWindow().setFlags(
+						WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+		}
 
-	// 	else { // Must be from the QR scanner
-	// 		IntentResult scanResult = IntentIntegrator
-	// 				.parseActivityResult(requestCode, resultCode, data);
+		else { // Must be from the QR scanner
+			IntentResult scanResult = IntentIntegrator
+					.parseActivityResult(requestCode, resultCode, data);
 
-	// 		// Process the results from the QR-scanning activity
-	// 		if (scanResult == null)
-	// 			return;
-	// 		String contents = scanResult.getContents();
-	// 		if (contents == null)
-	// 			return;
+			// Process the results from the QR-scanning activity
+			if (scanResult == null)
+				return;
+			String contents = scanResult.getContents();
+			if (contents == null)
+				return;
 
-	// 		IrmaQr qr;
-	// 		try {
-	// 			qr = GsonUtil.getGson().fromJson(contents, IrmaQr.class);
-	// 		} catch(Exception e) {
-	// 			irmaClientHandler.onFailure(IrmaClient.Action.UNKNOWN, "Not an IRMA session", null, "Content: " + contents);
-	// 			return;
-	// 		}
+			IrmaQr qr;
+			try {
+				qr = GsonUtil.getGson().fromJson(contents, IrmaQr.class);
+			} catch(Exception e) {
+				irmaClientHandler.onFailure(IrmaClient.Action.UNKNOWN, "Not an IRMA session", null, "Content: " + contents);
+				return;
+			}
 
-	// 		String qrType = qr.getType();
-	// 		if (qrType == null) qrType = "";
-	// 		switch (qrType) {
-	// 			case "schememanager":
-	// 				Log.i(TAG, "Adding new scheme manager from qr code!");
-	// 				SchemeManagerHandler.confirmAndDownloadManager(
-	// 						GsonUtil.getGson().fromJson(contents, SchemeManagerQr.class).getUrl(), this,
-	// 						new Runnable() {
-	// 							@Override public void run() {
-	// 								updateCredentialList(false);
-	// 							}
-	// 						});
-	// 				break;
-	// 			case "disclosing":
-	// 			case "signing":
-	// 			case "issuing":
-	// 			default:
-	// 				launchedFromBrowser = false;
-	// 				onlineEnrolling = false;
-	// 				new IrmaClient(contents, irmaClientHandler);
-	// 				break;
-	// 		}
-	// 	}
-	// }
+			String qrType = qr.getType();
+			if (qrType == null) qrType = "";
+			switch (qrType) {
+				case "schememanager":
+					Log.i(TAG, "Adding new scheme manager from qr code!");
+					SchemeManagerHandler.confirmAndDownloadManager(
+							GsonUtil.getGson().fromJson(contents, SchemeManagerQr.class).getUrl(), this,
+							new Runnable() {
+								@Override public void run() {
+									updateCredentialList(false);
+								}
+							});
+					break;
+				case "disclosing":
+				case "signing":
+				case "issuing":
+				default:
+					launchedFromBrowser = false;
+					onlineEnrolling = false;
+					new IrmaClient(contents, irmaClientHandler);
+					break;
+			}
+		}
+	}
 
 	// @Override
 	// public boolean onCreateOptionsMenu(Menu menu) {
