@@ -26,8 +26,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -45,6 +47,7 @@ import org.irmacard.cardemu.ExpandableCredentialsAdapter;
 import org.irmacard.cardemu.IRMApp;
 import org.irmacard.cardemu.SecureSSLSocketFactory;
 import org.irmacard.cardemu.credentialdetails.CredentialDetailActivity;
+import org.irmacard.cardemu.credentialdetails.CredentialDetailFragment;
 import org.irmacard.cardemu.identifiers.IdemixCredentialIdentifier;
 import org.irmacard.cardemu.irmaclient.IrmaClient;
 import org.irmacard.cardemu.irmaclient.IrmaClientHandler;
@@ -153,10 +156,54 @@ public class MainActivity extends WearableActivity {
         mProgressbar = (ProgressBar) findViewById(R.id.progressBar);
         mButton = (Button) findViewById(R.id.connectButton);
 
-		if (DEBUGUI)
-		{
-			mLog.setVisibility(View.VISIBLE);
-		}
+        if (DEBUGUI)
+            {
+                mLog.setVisibility(View.VISIBLE);
+            }
+
+        // Behaviour from smartphone app
+         super.onCreate(savedInstanceState);
+        Log.i(TAG, "onCreate() called");
+
+        // Disable screenshots if we should
+        if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean("allow_screenshots", false))
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+
+        // setContentView(R.layout.activity_main);
+
+        settings = getSharedPreferences(SETTINGS, 0);
+
+        // // Prepare cool list
+        ExpandableListView credentialList = (ExpandableListView) findViewById(R.id.listView);
+        credentialListAdapter = new ExpandableCredentialsAdapter(this);
+        // credentialList.setAdapter(credentialListAdapter);
+
+        new CredentialsLoader().execute();
+        new StoreLoader().execute();
+
+        // credentialList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        //         @Override
+        //         public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long id) {
+        //             try {
+        //                 IdemixCredentialIdentifier ici = (IdemixCredentialIdentifier) adapterView.getItemAtPosition(i);
+        //                 Log.i(TAG, "Credential with index " + i + " containing credential "
+        //                       + ici.getIdentifier() + " was " + "longclicked");
+
+
+        //                 Intent detailIntent = new Intent(MainActivity.this, CredentialDetailActivity.class);
+        //                 detailIntent.putExtra(CredentialDetailFragment.ATTRIBUTES,
+        //                                       credentialListAdapter.getAttributes(ici));
+        //                 detailIntent.putExtra(CredentialDetailFragment.HASHCODE, CredentialManager.getHashCode(ici));
+        //                 startActivityForResult(detailIntent, CredentialDetailActivity.ACTIVITY_CODE);
+        //             } catch (ClassCastException e) {
+        //                 Log.e(TAG, "Item " + i + " longclicked but was not a CredentialDescription");
+        //             }
+
+        //             return true;
+        //         }
+        //     });
+
+        // clearFeedback();
 
     }
 
