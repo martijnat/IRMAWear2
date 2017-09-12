@@ -176,32 +176,36 @@ public class MainActivity extends WearableActivity {
         // // Prepare cool list
         ExpandableListView credentialList = (ExpandableListView) findViewById(R.id.listView);
         credentialListAdapter = new ExpandableCredentialsAdapter(this);
-        // credentialList.setAdapter(credentialListAdapter);
+        credentialList.setAdapter(credentialListAdapter);
 
         new CredentialsLoader().execute();
         new StoreLoader().execute();
 
+		for(int i=0; i < credentialList.getChildCount(); i++) {
+			credentialList.expandGroup(i);
+		}
+
         // credentialList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-        //         @Override
-        //         public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long id) {
-        //             try {
-        //                 IdemixCredentialIdentifier ici = (IdemixCredentialIdentifier) adapterView.getItemAtPosition(i);
-        //                 Log.i(TAG, "Credential with index " + i + " containing credential "
-        //                       + ici.getIdentifier() + " was " + "longclicked");
+            //     @Override
+            //     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long id) {
+            //         try {
+            //             IdemixCredentialIdentifier ici = (IdemixCredentialIdentifier) adapterView.getItemAtPosition(i);
+            //             Log.i(TAG, "Credential with index " + i + " containing credential "
+            //                   + ici.getIdentifier() + " was " + "longclicked");
 
 
-        //                 Intent detailIntent = new Intent(MainActivity.this, CredentialDetailActivity.class);
-        //                 detailIntent.putExtra(CredentialDetailFragment.ATTRIBUTES,
-        //                                       credentialListAdapter.getAttributes(ici));
-        //                 detailIntent.putExtra(CredentialDetailFragment.HASHCODE, CredentialManager.getHashCode(ici));
-        //                 startActivityForResult(detailIntent, CredentialDetailActivity.ACTIVITY_CODE);
-        //             } catch (ClassCastException e) {
-        //                 Log.e(TAG, "Item " + i + " longclicked but was not a CredentialDescription");
-        //             }
+            //             Intent detailIntent = new Intent(MainActivity.this, CredentialDetailActivity.class);
+            //             detailIntent.putExtra(CredentialDetailFragment.ATTRIBUTES,
+            //                                   credentialListAdapter.getAttributes(ici));
+            //             detailIntent.putExtra(CredentialDetailFragment.HASHCODE, CredentialManager.getHashCode(ici));
+            //             startActivityForResult(detailIntent, CredentialDetailActivity.ACTIVITY_CODE);
+            //         } catch (ClassCastException e) {
+            //             Log.e(TAG, "Item " + i + " longclicked but was not a CredentialDescription");
+            //         }
 
-        //             return true;
-        //         }
-        //     });
+            //         return true;
+            //     }
+            // });
 
         // clearFeedback();
 
@@ -433,31 +437,12 @@ public class MainActivity extends WearableActivity {
 		setUIForState();
 	}
 
-	protected void deleteAllCredentials() {
+	protected void deleteAllCredentials(View v) {
 		if (getState() != State.IDLE)
 			return;
-
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(R.string.confirm_delete_all_title)
-				.setIcon(android.R.drawable.ic_dialog_alert)
-				.setNegativeButton(R.string.cancel, null)
-				.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						Log.i(TAG, "We're idle, attempting removal of all credentials");
-						CredentialManager.deleteAll();
-						updateCredentialList();
-					}
-				});
-
-		if (CredentialManager.getAnyKeyshareServer() == null) {
-			builder.setMessage(R.string.confirm_delete_all_question);
-		} else {
-			builder.setMessage(getString(R.string.confirm_delete_all_question)
-					+ " " + getString(R.string.confirm_delete_all_kss));
-		}
-
-		// builder.show();
-                LogUI("Line 366: //builder.show()");
+                LogUI("Deleting credentials (Without confirmation)");
+                CredentialManager.deleteAll();
+                updateCredentialList();
 	}
 
 	protected void tryDeleteCredential(int hashCode) {
