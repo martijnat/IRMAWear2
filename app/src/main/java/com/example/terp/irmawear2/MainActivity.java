@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -36,8 +37,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 // import org.irmacard.api.common.IrmaQr;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.google.zxing.qrcode.encoder.QRCode;
 
 import org.irmacard.api.common.IrmaQr;
 import org.irmacard.api.common.SchemeManagerQr;
@@ -78,6 +84,10 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 
 import javax.net.ssl.SSLSocketFactory;
+
+import static com.example.terp.irmawear2.R.color.black;
+import static com.example.terp.irmawear2.R.color.white;
+import static com.example.terp.irmawear2.R.id.qrdisplay;
 
 public class MainActivity extends WearableActivity {
 
@@ -150,6 +160,7 @@ public class MainActivity extends WearableActivity {
         setContentView(R.layout.activity_main);
         setAmbientEnabled();
 
+
         mStatus = (TextView) findViewById(R.id.status);
         mError = (TextView) findViewById(R.id.error);
         mLog = (TextView) findViewById(R.id.log);
@@ -170,6 +181,7 @@ public class MainActivity extends WearableActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
         // setContentView(R.layout.activity_main);
+		DisplayIPAdress();
 
         settings = getSharedPreferences(SETTINGS, 0);
 
@@ -210,6 +222,40 @@ public class MainActivity extends WearableActivity {
         // clearFeedback();
 
     }
+
+    public void DisplayIPAdress()
+	{
+		WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+		int ip = wm.getConnectionInfo().getIpAddress();
+		String qrtext = Integer.toString(ip)+ ":9090";
+		LogUI(qrtext);
+		ImageView qrdisplay = (ImageView) findViewById(R.id.qrdisplay);
+		qrdisplay.setVisibility(View.VISIBLE);
+
+		BitMatrix result;
+		Bitmap bitmap=null;
+		int qrsize = 1000;
+		try {
+			result = new MultiFormatWriter().encode(qrtext, BarcodeFormat.QR_CODE, qrsize, qrsize, null);
+			int w = result.getWidth();
+			int h = result.getHeight();
+			int[] pixels = new int[w * h];
+			for (int y = 0; y < h; y++) {
+				int offset = y * w;
+				for (int x = 0; x < w; x++) {
+					pixels[offset + x] = result.get(x, y) ?
+					0xff000000:
+					0x00ffffff;
+				}
+			}
+			bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_4444);
+			bitmap.setPixels(pixels, 0, qrsize, 0, 0, w, h);
+			qrdisplay.setImageBitmap(bitmap);
+		} catch (WriterException e) {
+			e.printStackTrace();
+		}
+
+		}
 
     public void ClickConnect(View view) {
         mProgressbar.setVisibility(View.VISIBLE);
