@@ -107,7 +107,6 @@ public class BackgroundClient  extends AsyncTask<String, Void, String> {
             out.close();
             mSocket.close();
             mServerSocket.close();
-            mMainActivity.ResetConnect();
         } catch (IOException e) {
             e.printStackTrace();
         }

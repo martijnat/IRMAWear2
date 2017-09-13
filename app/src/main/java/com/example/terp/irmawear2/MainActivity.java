@@ -24,6 +24,7 @@ import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.BoxInsetLayout;
 import android.text.format.Formatter;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
@@ -95,7 +96,6 @@ public class MainActivity extends WearableActivity {
     public TextView mStatus;
     public TextView mError;
     public TextView mLog;
-    public ProgressBar mProgressbar;
     public Button mButton;
 
     private BackgroundClient mBackgroundClient;
@@ -164,7 +164,6 @@ public class MainActivity extends WearableActivity {
         mStatus = (TextView) findViewById(R.id.status);
         mError = (TextView) findViewById(R.id.error);
         mLog = (TextView) findViewById(R.id.log);
-        mProgressbar = (ProgressBar) findViewById(R.id.progressBar);
         mButton = (Button) findViewById(R.id.connectButton);
 
         if (DEBUGUI)
@@ -181,7 +180,6 @@ public class MainActivity extends WearableActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
         // setContentView(R.layout.activity_main);
-		DisplayIPAdress();
 
         settings = getSharedPreferences(SETTINGS, 0);
 
@@ -223,14 +221,16 @@ public class MainActivity extends WearableActivity {
 
     }
 
-    public void DisplayIPAdress()
+    public void DisplayQR()
 	{
+		findViewById(R.id.qrlayout).setVisibility(View.VISIBLE);
+		findViewById(R.id.normallayout).setVisibility(View.GONE);
+
 		WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
 		int ip = wm.getConnectionInfo().getIpAddress();
-		String qrtext = Integer.toString(ip)+ ":9090";
+		String qrtext = Integer.toString(ip)+ ":9090\n";
 		LogUI(qrtext);
 		ImageView qrdisplay = (ImageView) findViewById(R.id.qrdisplay);
-		qrdisplay.setVisibility(View.VISIBLE);
 
 		BitMatrix result;
 		Bitmap bitmap=null;
@@ -244,7 +244,7 @@ public class MainActivity extends WearableActivity {
 				int offset = y * w;
 				for (int x = 0; x < w; x++) {
 					pixels[offset + x] = result.get(x, y) ?
-					0xff000000:
+					0xff172C73:
 					0x00ffffff;
 				}
 			}
@@ -258,22 +258,12 @@ public class MainActivity extends WearableActivity {
 		}
 
     public void ClickConnect(View view) {
-        mProgressbar.setVisibility(View.VISIBLE);
         mButton.setVisibility(View.GONE);
 		SetError("");
-        SetStatus("Listening ...");
+        SetStatus("Switching to QR display");
         mBackgroundClient = new BackgroundClient(MainActivity.this);
         mBackgroundClient.execute();
-        //Toast.makeText(MainActivity.this, "Pressed (?) test", Toast.LENGTH_SHORT).show();
-    }
-
-    public void ResetConnect(){
-        mProgressbar.setVisibility(View.GONE);
-        // mButton.setVisibility(View.VISIBLE);
-        //        mProgressbar.setVisibility(View.VISIBLE);
-        //        mButton.setVisibility(View.GONE);
-        //        mBackgroundClient = new BackgroundClient(MainActivity.this);
-        //        mBackgroundClient.execute();
+		DisplayQR();
     }
 
     public void LogUI(String str){
@@ -299,6 +289,8 @@ public class MainActivity extends WearableActivity {
 
     public String WifiInput(String result)
     {
+		findViewById(R.id.qrlayout).setVisibility(View.GONE);
+		findViewById(R.id.normallayout).setVisibility(View.VISIBLE);
         SetStatus("Processing input ...");
 
         try {
@@ -440,46 +432,13 @@ public class MainActivity extends WearableActivity {
 	}
 
 	public void setFeedback(String message, String state) {
-		int imageResource = 0;
-
 		setUIForState();
-
-		if (state.equals("success")) {
-			imageResource = R.drawable.irma_icon_ok_520px;
-		}
-		if (state.equals("warning")) {
-			imageResource = R.drawable.irma_icon_warning_520px;
-		}
-		if (state.equals("failure")) {
-			imageResource = R.drawable.irma_icon_missing_520px;
-		}
-
-		// ((TextView) findViewById(R.id.feedback_text)).setText(message);
-                LogUI("Line 315: " + state + ": " + message);
-                SetStatus(state + ": " + message);
-
-		// if (imageResource != 0) {
-		// 	((ImageView) findViewById(R.id.statusimage)).setImageResource(imageResource);
-		// 	showingFeedback = true;
-		// }
-
-		if (cdt != null)
-			cdt.cancel();
-
-		cdt = new CountDownTimer(FEEDBACK_SHOW_DELAY, 1000) {
-			public void onTick(long millisUntilFinished) {
-			}
-
-			public void onFinish() {
-				clearFeedback();
-			}
-		}.start();
+		LogUI(state + ":" + message);
 	}
 
 	private void clearFeedback() {
-		showingFeedback = false;
-		// ((TextView) findViewById(R.id.feedback_text)).setText("");
-                LogUI("Line 338: clearfeedback()");
+		LogUI("Line 338: clearfeedback()");
+		SetStatus("");
 		setUIForState();
 	}
 
@@ -547,98 +506,6 @@ public class MainActivity extends WearableActivity {
 
 
 	// @Override
-	// protected void onPause() {
-	// 	super.onPause();
-	// 	Log.i(TAG, "onPause() called");
-
-	// 	settings.edit()
-	// 			.putString("currentSessionUrl", currentSessionUrl)
-	// 			.putBoolean("onlineEnrolling", onlineEnrolling)
-	// 			.putBoolean("launchedFromBrowser", launchedFromBrowser)
-	// 			.apply();
-	// }
-
-	// @Override
-	// public void onNewIntent(Intent intent) {
-	// 	setIntent(intent);
-	// }
-
-	// @Override
-	// protected void onDestroy() {
-	// 	Log.i(TAG, "onDestroy() called");
-	// 	super.onDestroy();
-	// }
-
-	// @Override
-	// protected void onResume() {
-	// 	super.onResume();
-	// 	Log.i(TAG, "onResume() called");
-
-	// 	currentSessionUrl = settings.getString("currentSessionUrl", "()");
-	// 	onlineEnrolling = settings.getBoolean("onlineEnrolling", false);
-	// 	launchedFromBrowser = settings.getBoolean("launchedFromBrowser", false);
-
-	// 	if (getState() == State.IDLE) {
-	// 		updateCredentialList();
-	// 		processIntent();
-	// 	}
-	// }
-
-//	private void processIntent() {
-//		Intent intent = getIntent();
-//		Log.i(TAG, "processIntent() called, action: " + intent.getAction());
-//
-//		String qr = intent.getStringExtra("qr");
-//		if (!intent.getAction().equals(Intent.ACTION_VIEW) || qr == null)
-//			return;
-//
-//		Log.i(TAG, "Received qr in intent: " + qr);
-//		if(qr.equals(currentSessionUrl)) {
-//			Log.i(TAG, "Already processed this qr, ignoring");
-//			return;
-//		}
-//
-//		currentSessionUrl = qr;
-//		launchedFromBrowser = true;
-//		new IrmaClient(qr, irmaClientHandler);
-//	}
-
-	// public void onMainShapeTouch(View v) {
-	// 	if (getState() != State.IDLE)
-	// 		return;
-
-	// 	if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-	// 			== PackageManager.PERMISSION_DENIED) {
-	// 		ActivityCompat.requestPermissions(this,
-	// 				new String[] { Manifest.permission.CAMERA }, PERMISSION_REQUEST_CAMERA);
-	// 	}
-	// 	else {
-	// 		startQRScanner(getString(R.string.scan_qr));
-	// 	}
-	// }
-
-	// @Override
-	// public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-	//                                        @NonNull int[] grantResults) {
-	// 	switch (requestCode) {
-	// 		case PERMISSION_REQUEST_CAMERA:
-	// 			if (grantResults.length > 0
-	// 					&& grantResults[0] == PackageManager.PERMISSION_GRANTED
-	// 					&& permissions[0].equals(Manifest.permission.CAMERA)) {
-	// 				startQRScanner(getString(R.string.scan_qr));
-	// 			}
-	// 			break;
-	// 	}
-	// }
-
-	public void onOnlineEnrollButtonTouch(View v) {
-		onlineEnrolling = true;
-		Intent i = new Intent(Intent.ACTION_VIEW);
-		i.setData(Uri.parse("https://demo.irmacard.org/tomcat/irma_api_server/examples/issue-all.html"));
-		startActivity(i);
-	}
-
-	// @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
@@ -699,101 +566,6 @@ public class MainActivity extends WearableActivity {
 			}
 		}
 	}
-
-	// @Override
-	// public boolean onCreateOptionsMenu(Menu menu) {
-	// 	// Inflate the menu; this adds items to the action bar if it is present.
-	// 	getMenuInflater().inflate(R.menu.activity_main, menu);
-	// 	return true;
-	// }
-
-	// public void startQRScanner(String message) {
-	// 	IntentIntegrator integrator = new IntentIntegrator(this);
-	// 	integrator.setPrompt(message);
-	// 	integrator.initiateScan();
-	// }
-
-	// @Override
-	// public void onBackPressed() {
-	// 	// When we are not in IDLE state, return there
-	// 	if (getState() != State.IDLE) {
-	// 		if (cdt != null)
-	// 			cdt.cancel();
-
-	// 		setState(State.IDLE);
-	// 		clearFeedback();
-	// 	} else {
-	// 		// We are in Idle, do what we always do
-	// 		super.onBackPressed();
-	// 	}
-	// }
-
-	// @Override
-	// public boolean onPrepareOptionsMenu(Menu menu) {
-	// 	if (!CredentialManager.getUnEnrolledKSSes().isEmpty()){
-	// 		menu.findItem(R.id.menu_reregister).setVisible(true);
-	// 		menu.findItem(R.id.menu_clear).setVisible(false);
-	// 	} else {
-	// 		menu.findItem(R.id.menu_reregister).setVisible(false);
-	// 		menu.findItem(R.id.menu_clear).setVisible(true);
-	// 	}
-	// 	menu.findItem(R.id.menu_manual_session).setVisible(BuildConfig.DEBUG);
-	// 	menu.findItem(R.id.menu_delete_everything).setVisible(BuildConfig.DEBUG);
-	// 	menu.findItem(R.id.online_enroll).setVisible(BuildConfig.DEBUG);
-	// 	return true;
-	// }
-
-//	COMMENTED OUT DUE TO COMPILATION ERRORS
-//	@Override
-//	public boolean onOptionsItemSelected(MenuItem item) {
-//		Log.d(TAG, "menu press registered");
-//		// Handle item selection
-//		switch (item.getItemId()) {
-//			case R.id.preferences:
-//				Intent intent = new Intent();
-//				intent.setClassName(this, IRMAPreferenceActivity.class.getName());
-//				startActivityForResult(intent, IRMAPreferenceActivity.ACTIVITY_CODE);
-//				return true;
-//			case R.id.online_enroll:
-//				Log.d(TAG, "online enroll menu item pressed");
-//				onOnlineEnrollButtonTouch(null);
-//				return true;
-//			case R.id.show_card_log:
-//				Log.d(TAG, "show_card_log pressed");
-//				ArrayList<LogEntry> logs = new ArrayList<>(CredentialManager.getLogUI());
-//				logs = new ArrayList<>(logs.subList(0, Math.min(logs.size(), 250)));
-//				Intent logIntent = new Intent(this, LogActivity.class);
-//				logIntent.putExtra(LogFragment.ARG_LOG, logs);
-//				startActivity(logIntent);
-//				return true;
-//			case R.id.menu_clear:
-//				if (getState() == State.IDLE) {
-//					deleteAllCredentials();
-//					updateCredentialList();
-//				}
-//				return true;
-//			case R.id.menu_delete_everything:
-//				CredentialManager.clear();
-//				updateCredentialList();
-//				return true;
-//			case R.id.menu_manual_session:
-//				startManualSession();
-//				return true;
-//			case R.id.menu_reregister:
-//				initialRegistration();
-//				return true;
-//			case R.id.get_attributes:
-//				Intent i = new Intent(Intent.ACTION_VIEW);
-//				i.setData(Uri.parse("https://privacybydesign.foundation/uitgifte/"));
-//				startActivity(i);
-//				return true;
-//			case R.id.about_app:
-//				showAboutDialog();
-//				return true;
-//			default:
-//				return super.onOptionsItemSelected(item);
-//		}
-//	}
 
 	private void showAboutDialog() {
 		String version = BuildConfig.VERSION_NAME;

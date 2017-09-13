@@ -9,13 +9,57 @@
                                               android:layout_margin="0dp"
                                               android:background="@color/irmadarkblue">
 
+  <LinearLayout
+      android:id="@+id/qrlayout"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical"
+      android:layout_gravity="top"
+      android:visibility="gone">
+
+    <ImageView
+        android:id="@+id/qrbackdrop"
+        android:layout_width="185dp"
+        android:layout_height="185dp"
+        android:layout_gravity="center"
+        android:src="@drawable/whiteshaperounded"
+        android:padding="12dp"
+        android:layout_marginBottom="-185dp"
+        />
+
+    <ImageView
+        android:id="@+id/qrdisplay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:padding="0dp" />
+
+    <TextView
+        android:id="@+id/qrdusplaysubtext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/zxing_status_text"
+        android:text="Listening ..."
+        app:layout_box="all"
+        android:textSize="11sp"
+        android:layout_gravity="center"
+        android:layout_marginTop="-13dp"
+        />
+
+
+
+
+  </LinearLayout>
+
   <ScrollView
+      android:id="@+id/normallayout"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:orientation="vertical"
       android:layout_gravity="top"
       android:layout_margin="0dp"
-      android:padding="0dp">
+      android:padding="0dp"
+      android:visibility="visible">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -59,22 +103,6 @@
           android:layout_margin="20dp"
           />
 
-      <ImageView
-          android:id="@+id/qrbackdrop"
-          android:layout_width="180dp"
-          android:layout_height="180dp"
-          android:visibility="visible"
-          android:layout_gravity="center"
-          android:src="@drawable/whiteshaperounded"
-          android:layout_marginBottom="-180dp"/>
-      <ImageView
-          android:id="@+id/qrdisplay"
-          android:layout_width="180dp"
-          android:layout_height="180dp"
-          android:visibility="visible"
-          android:layout_gravity="center"
-          android:padding="0dp"/>
-
       <TextView
           android:id="@+id/error"
           android:layout_width="wrap_content"
@@ -115,18 +143,6 @@
           android:layout_margin="10dp"
           />
 
-      <ProgressBar
-          android:id="@+id/progressBar"
-          style="?android:attr/progressBarStyle"
-          android:visibility="gone"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:indeterminateTint="@color/primary_dark"
-          android:layout_margin="0dp"/>
-
-
-      <!-- android:layout_height="wrap_content" -->
-      <!-- android:background="@color/background" -->
       <HorizontalScrollView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content">
