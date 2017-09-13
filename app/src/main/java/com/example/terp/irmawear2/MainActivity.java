@@ -97,7 +97,7 @@ public class MainActivity extends WearableActivity {
     public TextView mError;
     public TextView mLog;
     public Button mButton;
-
+	public static int PORT = 9090;
     private BackgroundClient mBackgroundClient;
 
 	public static Boolean DEBUGUI = true;
@@ -190,46 +190,29 @@ public class MainActivity extends WearableActivity {
 
         new CredentialsLoader().execute();
         new StoreLoader().execute();
-
-		for(int i=0; i < credentialList.getChildCount(); i++) {
-			credentialList.expandGroup(i);
-		}
-
-        // credentialList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            //     @Override
-            //     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long id) {
-            //         try {
-            //             IdemixCredentialIdentifier ici = (IdemixCredentialIdentifier) adapterView.getItemAtPosition(i);
-            //             Log.i(TAG, "Credential with index " + i + " containing credential "
-            //                   + ici.getIdentifier() + " was " + "longclicked");
-
-
-            //             Intent detailIntent = new Intent(MainActivity.this, CredentialDetailActivity.class);
-            //             detailIntent.putExtra(CredentialDetailFragment.ATTRIBUTES,
-            //                                   credentialListAdapter.getAttributes(ici));
-            //             detailIntent.putExtra(CredentialDetailFragment.HASHCODE, CredentialManager.getHashCode(ici));
-            //             startActivityForResult(detailIntent, CredentialDetailActivity.ACTIVITY_CODE);
-            //         } catch (ClassCastException e) {
-            //             Log.e(TAG, "Item " + i + " longclicked but was not a CredentialDescription");
-            //         }
-
-            //         return true;
-            //     }
-            // });
-
-        // clearFeedback();
-
     }
+
+    public String MyIPAdress()
+	{
+		WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+		int ip = wm.getConnectionInfo().getIpAddress();
+
+		int ipbyte1 = (ip & (0xff <<  0)) >>  0;
+		int ipbyte2 = (ip & (0xff <<  8)) >>  8;
+		int ipbyte3 = (ip & (0xff << 16)) >> 16;
+		int ipbyte4 = (ip & (0xff << 24)) >> 24;
+		return ipbyte1 + "." + ipbyte2 + "." + ipbyte3 + "." + ipbyte4;
+	}
 
     public void DisplayQR()
 	{
 		findViewById(R.id.qrlayout).setVisibility(View.VISIBLE);
 		findViewById(R.id.normallayout).setVisibility(View.GONE);
 
-		WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
-		int ip = wm.getConnectionInfo().getIpAddress();
-		String qrtext = Integer.toString(ip)+ ":9090\n";
+		String qrtext = MyIPAdress() + " " + Integer.toString(PORT) + "                     \n\n\n";
 		LogUI(qrtext);
+		TextView qrsubtext = (TextView) findViewById(R.id.qrdusplaysubtext);
+		qrsubtext.setText(qrtext);
 		ImageView qrdisplay = (ImageView) findViewById(R.id.qrdisplay);
 
 		BitMatrix result;
@@ -328,28 +311,6 @@ public class MainActivity extends WearableActivity {
             LogUI("showErrorDialog: [techInfo] " + techInfo);
             LogUI("showErrorDialog: [showingTechInfo] " + Boolean.toString(showingTechInfo));
             SetError(title + ": " + message + "\n" + techInfo);
-		// String m = message;
-		// if (showingTechInfo && techInfo != null)
-		// 	m += ". " + techInfo;
-
-		// AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
-		// 		.setIcon(R.drawable.irma_error)
-		// 		.setTitle(title)
-		// 		.setMessage(m)
-		// 		.setPositiveButton(R.string.dismiss, null);
-
-		// if (techInfo != null) {
-		// 	int buttonText = showingTechInfo ? R.string.lessinfo : R.string.techinfo;
-		// 	builder.setNeutralButton(buttonText, new DialogInterface.OnClickListener() {
-		// 		@Override
-		// 		public void onClick(DialogInterface dialogInterface, int i) {
-		// 			showErrorDialog(title, message, techInfo, !showingTechInfo);
-		// 		}
-		// 	});
-		// }
-
-		// // builder.show();
-                // LogUI("Line 228: //builder.show()");
 	}
 
 	private State getState() {
@@ -375,10 +336,8 @@ public class MainActivity extends WearableActivity {
 		updateCredentialList();
 		setUIForState();
 
-		// If we're finished booting
 		if (state.isBooting() && credentialsLoaded && descriptionStoreLoaded && keyStoreLoaded) {
 			setState(State.IDLE);
-			// processIntent(); TODO UNCOMMENT THIS
 		}
 	}
 
@@ -414,6 +373,7 @@ public class MainActivity extends WearableActivity {
 				statusTextResource = R.string.status_ready;
                                 LogUI("statusTextResource = R.string.status_ready;");
                                 SetStatus("Ready");
+				                mButton.setVisibility(View.VISIBLE);
 				break;
 			case COMMUNICATING:
 				imageResource = R.drawable.irma_icon_card_found_520px;

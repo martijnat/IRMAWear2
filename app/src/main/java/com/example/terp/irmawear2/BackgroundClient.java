@@ -38,7 +38,7 @@ public class BackgroundClient  extends AsyncTask<String, Void, String> {
     }
 
     protected String doInBackground(String... arguments) {
-        int PORT = 9090;
+        int PORT = mMainActivity.PORT;
         String message = "";
         String line = "";
         String str = "";
