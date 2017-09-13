@@ -536,13 +536,6 @@ public class MainActivity extends WearableActivity {
 				.setTitle(R.string.about_app_title)
 				.setMessage(getString(R.string.about_app_text, version))
 				.setPositiveButton(R.string.dismiss, null)
-				.setNeutralButton(R.string.more_information, new DialogInterface.OnClickListener() {
-					@Override public void onClick(DialogInterface dialog, int which) {
-						Intent i = new Intent(Intent.ACTION_VIEW);
-						i.setData(Uri.parse("https://privacybydesign.foundation/irma/"));
-						startActivity(i);
-					}
-				})
 				.show();
 	}
 
@@ -560,22 +553,6 @@ public class MainActivity extends WearableActivity {
 			}
 		}
 	}
-
-//	private void startManualSession() {
-//		final EditText inputbox = new EditText(this);
-//		inputbox.setHint(R.string.qr_code_contents);
-//
-//		new AlertDialog.Builder(this)
-//				.setTitle(R.string.manually_start_session)
-//				.setView(inputbox)
-//				.setPositiveButton(R.string.start, new DialogInterface.OnClickListener() {
-//					@Override public void onClick(DialogInterface dialog, int whichButton) {
-//						new IrmaClient(inputbox.getText().toString(), irmaClientHandler);
-//					}
-//				})
-//				.setNegativeButton(android.R.string.cancel, null)
-//				.show();
-//	}
 
 	// Classes handling (integration with) other components of the app
 
