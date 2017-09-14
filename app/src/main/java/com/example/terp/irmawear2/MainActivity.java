@@ -99,6 +99,7 @@ public class MainActivity extends WearableActivity {
     public Button mButton;
     public static int PORT = 9090;
     private BackgroundClient mBackgroundClient;
+    private AsyncQRUpdate mQRupdater;
 
     public static Boolean DEBUGUI = true;
 
@@ -197,61 +198,44 @@ public class MainActivity extends WearableActivity {
         System.exit(0);
     }
 
-    public String MyIPAdress()
+       public void DisplayQR()
     {
-        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
-        int ip = wm.getConnectionInfo().getIpAddress();
 
-        int ipbyte1 = (ip & (0xff <<  0)) >>  0;
-        int ipbyte2 = (ip & (0xff <<  8)) >>  8;
-        int ipbyte3 = (ip & (0xff << 16)) >> 16;
-        int ipbyte4 = (ip & (0xff << 24)) >> 24;
-        return ipbyte1 + "." + ipbyte2 + "." + ipbyte3 + "." + ipbyte4;
-    }
-
-    public void DisplayQR()
-    {
         findViewById(R.id.qrlayout).setVisibility(View.VISIBLE);
         findViewById(R.id.normallayout).setVisibility(View.GONE);
+        MyUpdateQR();
+    }
 
-        String qrtext = MyIPAdress() + " " + Integer.toString(PORT) + "\n\n\n";
-        LogUI(qrtext);
+    public void MyUpdateQR()
+    {
+
+
+        mQRupdater = new AsyncQRUpdate(MainActivity.this);
+        mQRupdater.execute();
+    }
+
+    public void SetQRsubtext(String qrtext)
+    {
         TextView qrsubtext = (TextView) findViewById(R.id.qrdusplaysubtext);
         qrsubtext.setText(qrtext);
+    }
+
+    public void SetQRImage(Bitmap bitmap)
+    {
         ImageView qrdisplay = (ImageView) findViewById(R.id.qrdisplay);
-
-        BitMatrix result;
-        Bitmap bitmap=null;
-        int qrsize = 2048;
-        try {
-            result = new MultiFormatWriter().encode(qrtext, BarcodeFormat.QR_CODE, qrsize, qrsize, null);
-            int w = result.getWidth();
-            int h = result.getHeight();
-            int[] pixels = new int[w * h];
-            for (int y = 0; y < h; y++) {
-                int offset = y * w;
-                for (int x = 0; x < w; x++) {
-                    pixels[offset + x] = result.get(x, y) ?
-                                         0xff172C73:
-                                         0x00ffffff;
-                }
-            }
-            bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_4444);
-            bitmap.setPixels(pixels, 0, qrsize, 0, 0, w, h);
-            qrdisplay.setImageBitmap(bitmap);
-        } catch (WriterException e) {
-            e.printStackTrace();
-        }
-
+        qrdisplay.setImageBitmap(bitmap);
     }
 
     public void ClickConnect(View view) {
         mButton.setVisibility(View.GONE);
+
         SetError("");
         SetStatus("Switching to QR display");
+        DisplayQR();
+//        start listening on socket.
         mBackgroundClient = new BackgroundClient(MainActivity.this);
         mBackgroundClient.execute();
-        DisplayQR();
+
     }
 
     public void LogUI(String str) {
