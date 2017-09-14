@@ -65,6 +65,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:background="@drawable/gradient_blue"
         android:layout_gravity="top">
 
       <ImageView
@@ -145,7 +146,7 @@
 
       <HorizontalScrollView
           android:layout_width="wrap_content"
-          android:layout_height="wrap_content">
+          android:layout_height="500dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -154,7 +155,7 @@
           <ExpandableListView
             android:id="@+id/listView"
             android:layout_width="400dp"
-            android:layout_height="1000dp"
+            android:layout_height="match_parent"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
@@ -193,6 +194,20 @@
           android:shape="rectangle"
           android:layout_gravity="center"
           />
+
+      <Button
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textAllCaps="false"
+          android:visibility="visible"
+          android:text="Quit"
+          android:onClick="ExitApp"
+          android:textColor="@color/irmared"
+          android:shape="rectangle"
+          android:layout_marginTop="5dp"
+          android:layout_gravity="center"
+          />
+
       <!-- android:background="@drawable/whiteshaperounded" -->
 
 

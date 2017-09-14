@@ -192,6 +192,11 @@ public class MainActivity extends WearableActivity {
         new StoreLoader().execute();
     }
 
+    public void ExitApp(View view)
+    {
+        System.exit(0);
+    }
+
     public String MyIPAdress()
 	{
 		WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
@@ -209,7 +214,8 @@ public class MainActivity extends WearableActivity {
 		findViewById(R.id.qrlayout).setVisibility(View.VISIBLE);
 		findViewById(R.id.normallayout).setVisibility(View.GONE);
 
-		String qrtext = MyIPAdress() + " " + Integer.toString(PORT) + "                     \n\n\n";
+		String qrtext = MyIPAdress() + " " + Integer.toString(PORT) + "\n\n\n";
+		qrtext += "ignore\nthis\n\n";
 		LogUI(qrtext);
 		TextView qrsubtext = (TextView) findViewById(R.id.qrdusplaysubtext);
 		qrsubtext.setText(qrtext);
@@ -217,7 +223,7 @@ public class MainActivity extends WearableActivity {
 
 		BitMatrix result;
 		Bitmap bitmap=null;
-		int qrsize = 1000;
+		int qrsize = 2048;
 		try {
 			result = new MultiFormatWriter().encode(qrtext, BarcodeFormat.QR_CODE, qrsize, qrsize, null);
 			int w = result.getWidth();
