@@ -56,10 +56,10 @@ public class BackgroundClient  extends AsyncTask<String, Void, String> {
 
             line = in.readLine();
             while (in.ready())
-                {
-                    str = str + line;
-                    line = in.readLine();
-                }
+            {
+                str = str + line;
+                line = in.readLine();
+            }
 
             return str;
         } catch (IOException e) {

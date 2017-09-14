@@ -97,10 +97,10 @@ public class MainActivity extends WearableActivity {
     public TextView mError;
     public TextView mLog;
     public Button mButton;
-	public static int PORT = 9090;
+    public static int PORT = 9090;
     private BackgroundClient mBackgroundClient;
 
-	public static Boolean DEBUGUI = true;
+    public static Boolean DEBUGUI = true;
 
     // variable from android app
     private static final String TAG = "SmartWatchMainActivity";
@@ -167,12 +167,12 @@ public class MainActivity extends WearableActivity {
         mButton = (Button) findViewById(R.id.connectButton);
 
         if (DEBUGUI)
-            {
-                mLog.setVisibility(View.VISIBLE);
-            }
+        {
+            mLog.setVisibility(View.VISIBLE);
+        }
 
         // Behaviour from smartphone app
-         super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate() called");
 
         // Disable screenshots if we should
@@ -198,87 +198,87 @@ public class MainActivity extends WearableActivity {
     }
 
     public String MyIPAdress()
-	{
-		WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
-		int ip = wm.getConnectionInfo().getIpAddress();
+    {
+        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+        int ip = wm.getConnectionInfo().getIpAddress();
 
-		int ipbyte1 = (ip & (0xff <<  0)) >>  0;
-		int ipbyte2 = (ip & (0xff <<  8)) >>  8;
-		int ipbyte3 = (ip & (0xff << 16)) >> 16;
-		int ipbyte4 = (ip & (0xff << 24)) >> 24;
-		return ipbyte1 + "." + ipbyte2 + "." + ipbyte3 + "." + ipbyte4;
-	}
+        int ipbyte1 = (ip & (0xff <<  0)) >>  0;
+        int ipbyte2 = (ip & (0xff <<  8)) >>  8;
+        int ipbyte3 = (ip & (0xff << 16)) >> 16;
+        int ipbyte4 = (ip & (0xff << 24)) >> 24;
+        return ipbyte1 + "." + ipbyte2 + "." + ipbyte3 + "." + ipbyte4;
+    }
 
     public void DisplayQR()
-	{
-		findViewById(R.id.qrlayout).setVisibility(View.VISIBLE);
-		findViewById(R.id.normallayout).setVisibility(View.GONE);
+    {
+        findViewById(R.id.qrlayout).setVisibility(View.VISIBLE);
+        findViewById(R.id.normallayout).setVisibility(View.GONE);
 
-		String qrtext = MyIPAdress() + " " + Integer.toString(PORT) + "\n\n\n";
-		LogUI(qrtext);
-		TextView qrsubtext = (TextView) findViewById(R.id.qrdusplaysubtext);
-		qrsubtext.setText(qrtext);
-		ImageView qrdisplay = (ImageView) findViewById(R.id.qrdisplay);
+        String qrtext = MyIPAdress() + " " + Integer.toString(PORT) + "\n\n\n";
+        LogUI(qrtext);
+        TextView qrsubtext = (TextView) findViewById(R.id.qrdusplaysubtext);
+        qrsubtext.setText(qrtext);
+        ImageView qrdisplay = (ImageView) findViewById(R.id.qrdisplay);
 
-		BitMatrix result;
-		Bitmap bitmap=null;
-		int qrsize = 2048;
-		try {
-			result = new MultiFormatWriter().encode(qrtext, BarcodeFormat.QR_CODE, qrsize, qrsize, null);
-			int w = result.getWidth();
-			int h = result.getHeight();
-			int[] pixels = new int[w * h];
-			for (int y = 0; y < h; y++) {
-				int offset = y * w;
-				for (int x = 0; x < w; x++) {
-					pixels[offset + x] = result.get(x, y) ?
-					0xff172C73:
-					0x00ffffff;
-				}
-			}
-			bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_4444);
-			bitmap.setPixels(pixels, 0, qrsize, 0, 0, w, h);
-			qrdisplay.setImageBitmap(bitmap);
-		} catch (WriterException e) {
-			e.printStackTrace();
-		}
+        BitMatrix result;
+        Bitmap bitmap=null;
+        int qrsize = 2048;
+        try {
+            result = new MultiFormatWriter().encode(qrtext, BarcodeFormat.QR_CODE, qrsize, qrsize, null);
+            int w = result.getWidth();
+            int h = result.getHeight();
+            int[] pixels = new int[w * h];
+            for (int y = 0; y < h; y++) {
+                int offset = y * w;
+                for (int x = 0; x < w; x++) {
+                    pixels[offset + x] = result.get(x, y) ?
+                                         0xff172C73:
+                                         0x00ffffff;
+                }
+            }
+            bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_4444);
+            bitmap.setPixels(pixels, 0, qrsize, 0, 0, w, h);
+            qrdisplay.setImageBitmap(bitmap);
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
 
-		}
+    }
 
     public void ClickConnect(View view) {
         mButton.setVisibility(View.GONE);
-		SetError("");
+        SetError("");
         SetStatus("Switching to QR display");
         mBackgroundClient = new BackgroundClient(MainActivity.this);
         mBackgroundClient.execute();
-		DisplayQR();
+        DisplayQR();
     }
 
-    public void LogUI(String str){
+    public void LogUI(String str) {
         String sep = "\n";
         mLog.setText(mLog.getText()+sep + str);
 
     }
-    public void SetStatus(String str){
+    public void SetStatus(String str) {
         mStatus.setText(str);
 
     }
 
-    public void SetError(String str){
-		if (str.length()>0) {
-			mError.setText(str);
-			mError.setVisibility(View.VISIBLE);
-		}
-		else{
-			mError.setVisibility(View.GONE);
-		}
+    public void SetError(String str) {
+        if (str.length()>0) {
+            mError.setText(str);
+            mError.setVisibility(View.VISIBLE);
+        }
+        else {
+            mError.setVisibility(View.GONE);
+        }
 
     }
 
     public String WifiInput(String result)
     {
-		findViewById(R.id.qrlayout).setVisibility(View.GONE);
-		findViewById(R.id.normallayout).setVisibility(View.VISIBLE);
+        findViewById(R.id.qrlayout).setVisibility(View.GONE);
+        findViewById(R.id.normallayout).setVisibility(View.VISIBLE);
         SetStatus("Processing input ...");
 
         try {
@@ -305,430 +305,443 @@ public class MainActivity extends WearableActivity {
 
     }
     // Classes and functions copied from android app
-    	private void showErrorDialog(final String title, final String message, final String techInfo) {
-		showErrorDialog(title, message, techInfo, false);
-	}
+    private void showErrorDialog(final String title, final String message, final String techInfo) {
+        showErrorDialog(title, message, techInfo, false);
+    }
 
-	private void showErrorDialog(final String title, final String message,
-	                             final String techInfo, final boolean showingTechInfo) {
-            LogUI("showErrorDialog: [title] " + title);
-            LogUI("showErrorDialog: [message] " + message);
-            LogUI("showErrorDialog: [techInfo] " + techInfo);
-            LogUI("showErrorDialog: [showingTechInfo] " + Boolean.toString(showingTechInfo));
-            SetError(title + ": " + message + "\n" + techInfo);
-	}
+    private void showErrorDialog(final String title, final String message,
+                                 final String techInfo, final boolean showingTechInfo) {
+        LogUI("showErrorDialog: [title] " + title);
+        LogUI("showErrorDialog: [message] " + message);
+        LogUI("showErrorDialog: [techInfo] " + techInfo);
+        LogUI("showErrorDialog: [showingTechInfo] " + Boolean.toString(showingTechInfo));
+        SetError(title + ": " + message + "\n" + techInfo);
+    }
 
-	private State getState() {
-		return state;
-	}
+    private State getState() {
+        return state;
+    }
 
-	private void setState(State state) {
-		Log.i(TAG, "Set state: " + state);
-		this.state = state;
+    private void setState(State state) {
+        Log.i(TAG, "Set state: " + state);
+        this.state = state;
 
-		switch (state) {
-			case CREDENTIALS_LOADED:
-				credentialsLoaded = true;
-				break;
-			case DESCRIPTION_STORE_LOADED:
-				descriptionStoreLoaded = true;
-				break;
-			case KEY_STORE_LOADED:
-				keyStoreLoaded = true;
-				break;
-		}
+        switch (state) {
+        case CREDENTIALS_LOADED:
+            credentialsLoaded = true;
+            break;
+        case DESCRIPTION_STORE_LOADED:
+            descriptionStoreLoaded = true;
+            break;
+        case KEY_STORE_LOADED:
+            keyStoreLoaded = true;
+            break;
+        }
 
-		updateCredentialList();
-		setUIForState();
+        updateCredentialList();
+        setUIForState();
 
-		if (state.isBooting() && credentialsLoaded && descriptionStoreLoaded && keyStoreLoaded) {
-			setState(State.IDLE);
-		}
-	}
+        if (state.isBooting() && credentialsLoaded && descriptionStoreLoaded && keyStoreLoaded) {
+            setState(State.IDLE);
+        }
+    }
 
-	private void setUIForState() {
-		int imageResource = 0;
-		int statusTextResource = 0;
+    private void setUIForState() {
+        int imageResource = 0;
+        int statusTextResource = 0;
 
-		switch (getState()) {
-			case LOADING:
-			case CREDENTIALS_LOADED:
-			case DESCRIPTION_STORE_LOADED:
-			case KEY_STORE_LOADED:
-				imageResource = R.drawable.irma_icon_place_card_520px;
-				statusTextResource = R.string.loading;
-                                LogUI("statusTextResource = R.string.loading;");
-                                SetStatus("Key Store Loaded");
-				break;
-			case IDLE:
-				imageResource = R.drawable.irma_icon_place_card_520px;
-				statusTextResource = R.string.status_idle;
-                                LogUI("statusTextResource = R.string.status_idle;");
-                                SetStatus("");
-                                mButton.setVisibility(View.VISIBLE);
-				break;
-			case CONNECTED:
-				imageResource = R.drawable.irma_icon_place_card_520px;
-				statusTextResource = R.string.status_connected;
-                                LogUI("statusTextResource = R.string.status_connected;");
-                                SetStatus("Connected");
-				break;
-			case READY:
-				imageResource = R.drawable.irma_icon_card_found_520px;
-				statusTextResource = R.string.status_ready;
-                                LogUI("statusTextResource = R.string.status_ready;");
-                                SetStatus("Ready");
-				                mButton.setVisibility(View.VISIBLE);
-				break;
-			case COMMUNICATING:
-				imageResource = R.drawable.irma_icon_card_found_520px;
-				statusTextResource = R.string.status_communicating;
-                                LogUI("statusTextResource = R.string.status_communicating;");
-                                SetStatus("Communicating ...");
-				break;
-			default:
-				break;
-		}
+        switch (getState()) {
+        case LOADING:
+        case CREDENTIALS_LOADED:
+        case DESCRIPTION_STORE_LOADED:
+        case KEY_STORE_LOADED:
+            imageResource = R.drawable.irma_icon_place_card_520px;
+            statusTextResource = R.string.loading;
+            LogUI("statusTextResource = R.string.loading;");
+            SetStatus("Key Store Loaded");
+            break;
+        case IDLE:
+            imageResource = R.drawable.irma_icon_place_card_520px;
+            statusTextResource = R.string.status_idle;
+            LogUI("statusTextResource = R.string.status_idle;");
+            SetStatus("");
+            mButton.setVisibility(View.VISIBLE);
+            break;
+        case CONNECTED:
+            imageResource = R.drawable.irma_icon_place_card_520px;
+            statusTextResource = R.string.status_connected;
+            LogUI("statusTextResource = R.string.status_connected;");
+            SetStatus("Connected");
+            break;
+        case READY:
+            imageResource = R.drawable.irma_icon_card_found_520px;
+            statusTextResource = R.string.status_ready;
+            LogUI("statusTextResource = R.string.status_ready;");
+            SetStatus("Ready");
+            mButton.setVisibility(View.VISIBLE);
+            break;
+        case COMMUNICATING:
+            imageResource = R.drawable.irma_icon_card_found_520px;
+            statusTextResource = R.string.status_communicating;
+            LogUI("statusTextResource = R.string.status_communicating;");
+            SetStatus("Communicating ...");
+            break;
+        default:
+            break;
+        }
 
-		// ((TextView) findViewById(R.id.status_text)).setText(statusTextResource);
-                LogUI("Line 294: "+Integer.toString(statusTextResource));
-		// if (!showingFeedback)
-		// 	((ImageView) findViewById(R.id.statusimage)).setImageResource(imageResource);
-	}
+        // ((TextView) findViewById(R.id.status_text)).setText(statusTextResource);
+        LogUI("Line 294: "+Integer.toString(statusTextResource));
+        // if (!showingFeedback)
+        // 	((ImageView) findViewById(R.id.statusimage)).setImageResource(imageResource);
+    }
 
-	public void setFeedback(String message, String state) {
-		setUIForState();
-		LogUI(state + ":" + message);
-	}
+    public void setFeedback(String message, String state) {
+        setUIForState();
+        LogUI(state + ":" + message);
+    }
 
-	private void clearFeedback() {
-		LogUI("Line 338: clearfeedback()");
-		SetStatus("");
-		setUIForState();
-	}
+    private void clearFeedback() {
+        LogUI("Line 338: clearfeedback()");
+        SetStatus("");
+        setUIForState();
+    }
 
-	protected void deleteAllCredentials(View v) {
-		if (getState() != State.IDLE)
-			return;
-                LogUI("Deleting credentials (Without confirmation)");
-                CredentialManager.deleteAll();
-                updateCredentialList();
-	}
+    protected void deleteAllCredentials(View v) {
+        if (getState() != State.IDLE)
+            return;
+        LogUI("Deleting credentials (Without confirmation)");
+        CredentialManager.deleteAll();
+        updateCredentialList();
+    }
 
-	protected void tryDeleteCredential(int hashCode) {
-		if (getState() != State.IDLE) {
-			Log.i(TAG, "Delete long-click ignored in non-idle mode");
-			return;
-		}
+    protected void tryDeleteCredential(int hashCode) {
+        if (getState() != State.IDLE) {
+            Log.i(TAG, "Delete long-click ignored in non-idle mode");
+            return;
+        }
 
-		IdemixCredentialIdentifier ici = CredentialManager.findCredential(hashCode);
-		if (ici == null)
-			return;
+        IdemixCredentialIdentifier ici = CredentialManager.findCredential(hashCode);
+        if (ici == null)
+            return;
 
-		Log.w(TAG, "Deleting credential " + ici.toString());
-		CredentialManager.delete(ici);
-		updateCredentialList();
-	}
+        Log.w(TAG, "Deleting credential " + ici.toString());
+        CredentialManager.delete(ici);
+        updateCredentialList();
+    }
 
-	/**
-	 * Update the list of credentials. (Note: this method does nothing if the activity is not in
-	 * an appropriate state.)
-	 */
-	protected void updateCredentialList() {
-		updateCredentialList(true);
-	}
-
-	/**
-	 * Update the list of credentials if the activity is in the appropriate state
-	 * @param tryDownloading Whether to update the description store and keystore in advance
+    /**
+     * Update the list of credentials. (Note: this method does nothing if the activity is not in
+     * an appropriate state.)
      */
-	protected void updateCredentialList(boolean tryDownloading) {
-		if (!credentialsLoaded || !descriptionStoreLoaded
-				|| (!getState().isBooting() && getState() != State.IDLE))
-			return;
+    protected void updateCredentialList() {
+        updateCredentialList(true);
+    }
 
-		if (tryDownloading) {
-			CredentialManager.updateStores(new StoreManager.DownloadHandler() {
-				@Override public void onSuccess() {
-					updateCredentialList(false);
-				}
-				@Override public void onError(Exception e) {
-					setFeedback(getString(R.string.downloading_credential_info_failed), "warning");
-					updateCredentialList(false);
-				}
-			});
-		}
+    /**
+     * Update the list of credentials if the activity is in the appropriate state
+     * @param tryDownloading Whether to update the description store and keystore in advance
+     */
+    protected void updateCredentialList(boolean tryDownloading) {
+        if (!credentialsLoaded || !descriptionStoreLoaded
+                || (!getState().isBooting() && getState() != State.IDLE))
+            return;
 
-		LinkedHashMap<IdemixCredentialIdentifier, Attributes> credentials = CredentialManager.getAllAttributes();
-		credentialListAdapter.updateData(credentials);
+        if (tryDownloading) {
+            CredentialManager.updateStores(new StoreManager.DownloadHandler() {
+                @Override public void onSuccess() {
+                    updateCredentialList(false);
+                }
+                @Override public void onError(Exception e) {
+                    setFeedback(getString(R.string.downloading_credential_info_failed), "warning");
+                    updateCredentialList(false);
+                }
+            });
+        }
 
-		TextView noCredsText = (TextView) findViewById(R.id.no_credentials_text);
-		int visibility = credentials.isEmpty() ? View.VISIBLE : View.INVISIBLE;
+        LinkedHashMap<IdemixCredentialIdentifier, Attributes> credentials = CredentialManager.getAllAttributes();
+        credentialListAdapter.updateData(credentials);
 
-		if (noCredsText != null)
-			noCredsText.setVisibility(visibility);
-	}
+        TextView noCredsText = (TextView) findViewById(R.id.no_credentials_text);
+        int visibility = credentials.isEmpty() ? View.VISIBLE : View.INVISIBLE;
 
-
-	// @Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-
-		if (requestCode == CredentialDetailActivity.ACTIVITY_CODE && resultCode == CredentialDetailActivity.RESULT_DELETE) {
-			int hashCode = data.getIntExtra(CredentialDetailActivity.ARG_RESULT_DELETE, 0);
-			if (hashCode != 0)
-				tryDeleteCredential(hashCode);
-		}
-
-		else if (requestCode == IRMAPreferenceActivity.ACTIVITY_CODE) {
-			if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("allow_screenshots", false))
-				getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
-			else
-				getWindow().setFlags(
-						WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
-		}
-
-		else { // Must be from the QR scanner
-			IntentResult scanResult = IntentIntegrator
-					.parseActivityResult(requestCode, resultCode, data);
-
-			// Process the results from the QR-scanning activity
-			if (scanResult == null)
-				return;
-			String contents = scanResult.getContents();
-			if (contents == null)
-				return;
-
-			IrmaQr qr;
-			try {
-				qr = GsonUtil.getGson().fromJson(contents, IrmaQr.class);
-			} catch(Exception e) {
-				irmaClientHandler.onFailure(IrmaClient.Action.UNKNOWN, "Not an IRMA session", null, "Content: " + contents);
-				return;
-			}
-
-			String qrType = qr.getType();
-			if (qrType == null) qrType = "";
-			switch (qrType) {
-				case "schememanager":
-					Log.i(TAG, "Adding new scheme manager from qr code!");
-					SchemeManagerHandler.confirmAndDownloadManager(
-							GsonUtil.getGson().fromJson(contents, SchemeManagerQr.class).getUrl(), this,
-							new Runnable() {
-								@Override public void run() {
-									updateCredentialList(false);
-								}
-							});
-					break;
-				case "disclosing":
-				case "signing":
-				case "issuing":
-				default:
-					launchedFromBrowser = false;
-					onlineEnrolling = false;
-					new IrmaClient(contents, irmaClientHandler);
-					break;
-			}
-		}
-	}
-
-	private void showAboutDialog() {
-		String version = BuildConfig.VERSION_NAME;
-		if (BuildConfig.DEBUG)
-			version += " (debug build)";
-
-		new AlertDialog.Builder(this)
-				.setTitle(R.string.about_app_title)
-				.setMessage(getString(R.string.about_app_text, version))
-				.setPositiveButton(R.string.dismiss, null)
-				.show();
-	}
-
-	public void initialRegistration() {
-		ArrayList<SchemeManager> managers = CredentialManager.getUnEnrolledKSSes();
-		if (managers!=null && !managers.isEmpty()) {
-			for (final SchemeManager m:managers) {
-				SchemeManagerHandler.getKeyserverEnrollInput(MainActivity.this, m, new SchemeManagerHandler.KeyserverInputHandler() {
-					@Override
-					public void done(String email, String pin) {
-						SchemeManagerHandler.enrollKeyshareServer(
-								m.getName(), m.getKeyshareServer(), email, pin, MainActivity.this, null);
-					}
-				});
-			}
-		}
-	}
-
-	// Classes handling (integration with) other components of the app
-
-	/**
-	 * Reports session info to the user using {@link #setFeedback(String, String)} and updates
-	 * the activity state
-	 */
-	private class ClientHandler extends IrmaClientHandler {
-		public ClientHandler() {
-			super(MainActivity.this);
-		}
-
-		@Override public void onStatusUpdate(IrmaClient.Action action, IrmaClient.Status status) {
-			switch (status) {
-				case COMMUNICATING:
-					setState(State.COMMUNICATING); break;
-				case CONNECTED:
-					setState(State.CONNECTED); break;
-				case DONE:
-					setState(State.IDLE); break;
-			}
-		}
-
-		@Override public void onSuccess(IrmaClient.Action action) {
-			switch (action) {
-				case DISCLOSING:
-					setFeedback(getString(R.string.disclosure_successful), "success"); break;
-				case SIGNING:
-					setFeedback(getString(R.string.signing_successful), "success"); break;
-				case ISSUING:
-					setFeedback(getString(R.string.issuing_succesful), "success"); break;
-			}
-			finish(true);
-		}
-
-		@Override public void onCancelled(IrmaClient.Action action) {
-			switch (action) {
-				case DISCLOSING:
-					setFeedback(getString(R.string.disclosure_cancelled), "warning"); break;
-				case SIGNING:
-					setFeedback(getString(R.string.signing_cancelled), "warning"); break;
-				case ISSUING:
-					setFeedback(getString(R.string.issuing_cancelled), "warning"); break;
-			}
-			finish(true);
-		}
-
-		@Override public void onFailure(IrmaClient.Action action, String message, ApiErrorMessage error, final String techInfo) {
-			final String title;
-			switch (action) {
-				case DISCLOSING:
-					title = getString(R.string.disclosure_failed); break;
-				case SIGNING:
-					title = getString(R.string.signing_failed); break;
-				case ISSUING:
-					title = getString(R.string.issuing_failed); break;
-				case UNKNOWN:
-				default:
-					title = getString(R.string.failed); break;
-			}
-
-			final String feedback = title + ": " + message;
-			setFeedback(title, "failure");
-			finish(false);
-
-			showErrorDialog(title, feedback, techInfo);
-		}
-
-		private void finish(boolean returnToBrowser) {
-			setState(State.IDLE);
-
-			if (!onlineEnrolling && launchedFromBrowser && returnToBrowser)
-				onBackPressed();
-
-			onlineEnrolling = false;
-			launchedFromBrowser = false;
-		}
-	}
-
-	/**
-	 * Initializes {@link CredentialManager} asynchroniously.
-	 */
-	private class CredentialsLoader extends AsyncTask<Void,Void,Exception> {
-		@Override
-		protected Exception doInBackground(Void... params) {
-			try {
-				Log.i(TAG, "Loading credentials and logs");
-				CredentialManager.init(settings);
-				return null;
-			} catch (CredentialsException e) {
-				return e;
-			}
-		}
-
-		@Override
-		protected void onPostExecute(Exception e) {
-			Log.i(TAG, "Finished loading credentials and logs");
-			if (e == null)
-				setState(State.CREDENTIALS_LOADED);
-			else {
-				// In this case the app would at some point erase the unserializable attributes by
-				// overwriting them, so we should give the user a chance to bail out
-				new AlertDialog.Builder(MainActivity.this)
-						.setIcon(R.drawable.irma_error)
-						.setTitle(R.string.cantreadattributes)
-						.setMessage(R.string.cantreadattributes_long)
-						.setNeutralButton(R.string.se_continue, new DialogInterface.OnClickListener() {
-							@Override public void onClick(DialogInterface dialogInterface, int i) {
-								settings.edit().remove(CredentialManager.CREDENTIAL_STORAGE).apply();
-								try {
-									CredentialManager.init(settings);
-									updateCredentialList();
-								} catch (CredentialsException e1) {
-									// This couldn't possibly happen, but if it does, let's be safe
-									throw new RuntimeException(e1);
-								}
-							}
-						})
-						.setPositiveButton(R.string.exit, new DialogInterface.OnClickListener() {
-							@Override public void onClick(DialogInterface dialogInterface, int i) {
-								//Process.killProcess(Process.myPid());
-								System.exit(1);
-							}
-						})
-						.show();
-			}
-		}
-	}
-
-	/**
-	 * Loads {@link DescriptionStore} and {@link IdemixKeyStore} asynchroniously, reporting back
-	 * to the activity in between
-	 */
-	private class StoreLoader extends AsyncTask<Void,Void,Exception> {
-		@Override
-		protected Exception doInBackground(Void... voids) {
-			Log.i(TAG, "Loading DescriptionStore and IdemixKeyStore");
-			FileReader reader = new AndroidFileReader(MainActivity.this);
-			SSLSocketFactory socketFactory = null;
-			if (Build.VERSION.SDK_INT >= 21) // 20 = 4.4 Kitkat, 21 = 5.0 Lollipop
-				socketFactory = new SecureSSLSocketFactory();
-
-			try {
-				DescriptionStore.initialize(new DescriptionStoreDeserializer(reader), IRMApp.getStoreManager(), socketFactory);
-				Log.i(TAG, "Loaded DescriptionStore");
-				publishProgress();
-
-				IdemixKeyStore.initialize(new IdemixKeyStoreDeserializer(reader), IRMApp.getStoreManager());
-				Log.i(TAG, "Loaded IdemixKeyStore");
-				return null;
-			} catch (InfoException e) {
-				return e;
-			}
-		}
-
-		@Override
-		protected void onProgressUpdate(Void... values) {
-			setState(State.DESCRIPTION_STORE_LOADED);
-		}
-
-		@Override
-		protected void onPostExecute(Exception e) {
-			Log.i(TAG, "Finished loading DescriptionStore and IdemixKeyStore");
-			if (e != null)
-				throw new RuntimeException(e);
-			else
-				setState(State.KEY_STORE_LOADED);
+        if (noCredsText != null)
+            noCredsText.setVisibility(visibility);
+    }
 
 
-			initialRegistration();
-		}
-	}
+    // @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == CredentialDetailActivity.ACTIVITY_CODE && resultCode == CredentialDetailActivity.RESULT_DELETE) {
+            int hashCode = data.getIntExtra(CredentialDetailActivity.ARG_RESULT_DELETE, 0);
+            if (hashCode != 0)
+                tryDeleteCredential(hashCode);
+        }
+
+        else if (requestCode == IRMAPreferenceActivity.ACTIVITY_CODE) {
+            if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("allow_screenshots", false))
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+            else
+                getWindow().setFlags(
+                    WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        }
+
+        else { // Must be from the QR scanner
+            IntentResult scanResult = IntentIntegrator
+                                      .parseActivityResult(requestCode, resultCode, data);
+
+            // Process the results from the QR-scanning activity
+            if (scanResult == null)
+                return;
+            String contents = scanResult.getContents();
+            if (contents == null)
+                return;
+
+            IrmaQr qr;
+            try {
+                qr = GsonUtil.getGson().fromJson(contents, IrmaQr.class);
+            } catch(Exception e) {
+                irmaClientHandler.onFailure(IrmaClient.Action.UNKNOWN, "Not an IRMA session", null, "Content: " + contents);
+                return;
+            }
+
+            String qrType = qr.getType();
+            if (qrType == null) qrType = "";
+            switch (qrType) {
+            case "schememanager":
+                Log.i(TAG, "Adding new scheme manager from qr code!");
+                SchemeManagerHandler.confirmAndDownloadManager(
+                    GsonUtil.getGson().fromJson(contents, SchemeManagerQr.class).getUrl(), this,
+                new Runnable() {
+                    @Override public void run() {
+                        updateCredentialList(false);
+                    }
+                });
+                break;
+            case "disclosing":
+            case "signing":
+            case "issuing":
+            default:
+                launchedFromBrowser = false;
+                onlineEnrolling = false;
+                new IrmaClient(contents, irmaClientHandler);
+                break;
+            }
+        }
+    }
+
+    private void showAboutDialog() {
+        String version = BuildConfig.VERSION_NAME;
+        if (BuildConfig.DEBUG)
+            version += " (debug build)";
+
+        new AlertDialog.Builder(this)
+        .setTitle(R.string.about_app_title)
+        .setMessage(getString(R.string.about_app_text, version))
+        .setPositiveButton(R.string.dismiss, null)
+        .show();
+    }
+
+    public void initialRegistration() {
+        ArrayList<SchemeManager> managers = CredentialManager.getUnEnrolledKSSes();
+        if (managers!=null && !managers.isEmpty()) {
+            for (final SchemeManager m:managers) {
+                SchemeManagerHandler.getKeyserverEnrollInput(MainActivity.this, m, new SchemeManagerHandler.KeyserverInputHandler() {
+                    @Override
+                    public void done(String email, String pin) {
+                        SchemeManagerHandler.enrollKeyshareServer(
+                            m.getName(), m.getKeyshareServer(), email, pin, MainActivity.this, null);
+                    }
+                });
+            }
+        }
+    }
+
+    // Classes handling (integration with) other components of the app
+
+    /**
+     * Reports session info to the user using {@link #setFeedback(String, String)} and updates
+     * the activity state
+     */
+    private class ClientHandler extends IrmaClientHandler {
+        public ClientHandler() {
+            super(MainActivity.this);
+        }
+
+        @Override public void onStatusUpdate(IrmaClient.Action action, IrmaClient.Status status) {
+            switch (status) {
+            case COMMUNICATING:
+                setState(State.COMMUNICATING);
+                break;
+            case CONNECTED:
+                setState(State.CONNECTED);
+                break;
+            case DONE:
+                setState(State.IDLE);
+                break;
+            }
+        }
+
+        @Override public void onSuccess(IrmaClient.Action action) {
+            switch (action) {
+            case DISCLOSING:
+                setFeedback(getString(R.string.disclosure_successful), "success");
+                break;
+            case SIGNING:
+                setFeedback(getString(R.string.signing_successful), "success");
+                break;
+            case ISSUING:
+                setFeedback(getString(R.string.issuing_succesful), "success");
+                break;
+            }
+            finish(true);
+        }
+
+        @Override public void onCancelled(IrmaClient.Action action) {
+            switch (action) {
+            case DISCLOSING:
+                setFeedback(getString(R.string.disclosure_cancelled), "warning");
+                break;
+            case SIGNING:
+                setFeedback(getString(R.string.signing_cancelled), "warning");
+                break;
+            case ISSUING:
+                setFeedback(getString(R.string.issuing_cancelled), "warning");
+                break;
+            }
+            finish(true);
+        }
+
+        @Override public void onFailure(IrmaClient.Action action, String message, ApiErrorMessage error, final String techInfo) {
+            final String title;
+            switch (action) {
+            case DISCLOSING:
+                title = getString(R.string.disclosure_failed);
+                break;
+            case SIGNING:
+                title = getString(R.string.signing_failed);
+                break;
+            case ISSUING:
+                title = getString(R.string.issuing_failed);
+                break;
+            case UNKNOWN:
+            default:
+                title = getString(R.string.failed);
+                break;
+            }
+
+            final String feedback = title + ": " + message;
+            setFeedback(title, "failure");
+            finish(false);
+
+            showErrorDialog(title, feedback, techInfo);
+        }
+
+        private void finish(boolean returnToBrowser) {
+            setState(State.IDLE);
+
+            if (!onlineEnrolling && launchedFromBrowser && returnToBrowser)
+                onBackPressed();
+
+            onlineEnrolling = false;
+            launchedFromBrowser = false;
+        }
+    }
+
+    /**
+     * Initializes {@link CredentialManager} asynchroniously.
+     */
+    private class CredentialsLoader extends AsyncTask<Void,Void,Exception> {
+        @Override
+        protected Exception doInBackground(Void... params) {
+            try {
+                Log.i(TAG, "Loading credentials and logs");
+                CredentialManager.init(settings);
+                return null;
+            } catch (CredentialsException e) {
+                return e;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Exception e) {
+            Log.i(TAG, "Finished loading credentials and logs");
+            if (e == null)
+                setState(State.CREDENTIALS_LOADED);
+            else {
+                // In this case the app would at some point erase the unserializable attributes by
+                // overwriting them, so we should give the user a chance to bail out
+                new AlertDialog.Builder(MainActivity.this)
+                .setIcon(R.drawable.irma_error)
+                .setTitle(R.string.cantreadattributes)
+                .setMessage(R.string.cantreadattributes_long)
+                .setNeutralButton(R.string.se_continue, new DialogInterface.OnClickListener() {
+                    @Override public void onClick(DialogInterface dialogInterface, int i) {
+                        settings.edit().remove(CredentialManager.CREDENTIAL_STORAGE).apply();
+                        try {
+                            CredentialManager.init(settings);
+                            updateCredentialList();
+                        } catch (CredentialsException e1) {
+                            // This couldn't possibly happen, but if it does, let's be safe
+                            throw new RuntimeException(e1);
+                        }
+                    }
+                })
+                .setPositiveButton(R.string.exit, new DialogInterface.OnClickListener() {
+                    @Override public void onClick(DialogInterface dialogInterface, int i) {
+                        //Process.killProcess(Process.myPid());
+                        System.exit(1);
+                    }
+                })
+                .show();
+            }
+        }
+    }
+
+    /**
+     * Loads {@link DescriptionStore} and {@link IdemixKeyStore} asynchroniously, reporting back
+     * to the activity in between
+     */
+    private class StoreLoader extends AsyncTask<Void,Void,Exception> {
+        @Override
+        protected Exception doInBackground(Void... voids) {
+            Log.i(TAG, "Loading DescriptionStore and IdemixKeyStore");
+            FileReader reader = new AndroidFileReader(MainActivity.this);
+            SSLSocketFactory socketFactory = null;
+            if (Build.VERSION.SDK_INT >= 21) // 20 = 4.4 Kitkat, 21 = 5.0 Lollipop
+                socketFactory = new SecureSSLSocketFactory();
+
+            try {
+                DescriptionStore.initialize(new DescriptionStoreDeserializer(reader), IRMApp.getStoreManager(), socketFactory);
+                Log.i(TAG, "Loaded DescriptionStore");
+                publishProgress();
+
+                IdemixKeyStore.initialize(new IdemixKeyStoreDeserializer(reader), IRMApp.getStoreManager());
+                Log.i(TAG, "Loaded IdemixKeyStore");
+                return null;
+            } catch (InfoException e) {
+                return e;
+            }
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            setState(State.DESCRIPTION_STORE_LOADED);
+        }
+
+        @Override
+        protected void onPostExecute(Exception e) {
+            Log.i(TAG, "Finished loading DescriptionStore and IdemixKeyStore");
+            if (e != null)
+                throw new RuntimeException(e);
+            else
+                setState(State.KEY_STORE_LOADED);
+
+
+            initialRegistration();
+        }
+    }
 
 }
