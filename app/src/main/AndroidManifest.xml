@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.UPDATE_DEVICE_STATS" />
 
 
 
@@ -19,6 +18,7 @@
         android:supportsRtl="true"
         android:icon="@drawable/ic_launcher_square"
         android:theme="@style/Theme.AppCompat.Light"
+        android:keepScreenOn="true"
         >
         <!--android:allowBackup="true"-->
         <uses-library

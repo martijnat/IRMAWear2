@@ -215,7 +215,6 @@ public class MainActivity extends WearableActivity {
 		findViewById(R.id.normallayout).setVisibility(View.GONE);
 
 		String qrtext = MyIPAdress() + " " + Integer.toString(PORT) + "\n\n\n";
-		qrtext += "ignore\nthis\n\n";
 		LogUI(qrtext);
 		TextView qrsubtext = (TextView) findViewById(R.id.qrdusplaysubtext);
 		qrsubtext.setText(qrtext);
