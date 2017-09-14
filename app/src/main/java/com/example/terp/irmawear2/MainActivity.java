@@ -98,6 +98,8 @@ public class MainActivity extends WearableActivity {
     public TextView mLog;
     public Button mButton;
     public static int PORT = 9090;
+    public Boolean QRcreated = false;
+    public String qrcode = "";
     private BackgroundClient mBackgroundClient;
     private AsyncQRUpdate mQRupdater;
 
@@ -162,29 +164,22 @@ public class MainActivity extends WearableActivity {
         setAmbientEnabled();
 
 
-        mStatus = (TextView) findViewById(R.id.status);
-        mError = (TextView) findViewById(R.id.error);
-        mLog = (TextView) findViewById(R.id.log);
-        mButton = (Button) findViewById(R.id.connectButton);
+        mStatus = findViewById(R.id.status);
+        mError = findViewById(R.id.error);
+        mLog = findViewById(R.id.log);
+        mButton = findViewById(R.id.connectButton);
 
-        if (DEBUGUI)
-        {
-            mLog.setVisibility(View.VISIBLE);
-        }
 
-        // Behaviour from smartphone app
+        mLog.setVisibility(DEBUGUI?View.VISIBLE:View.GONE);
+
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate() called");
 
-        // Disable screenshots if we should
-        if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean("allow_screenshots", false))
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
-
-        // setContentView(R.layout.activity_main);
+//        // Disable screenshots if we should
+//        if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean("allow_screenshots", false))
+//            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
         settings = getSharedPreferences(SETTINGS, 0);
 
-        // // Prepare cool list
         ExpandableListView credentialList = (ExpandableListView) findViewById(R.id.listView);
         credentialListAdapter = new ExpandableCredentialsAdapter(this);
         credentialList.setAdapter(credentialListAdapter);
@@ -200,7 +195,6 @@ public class MainActivity extends WearableActivity {
 
     public void DisplayQR()
     {
-
         findViewById(R.id.qrlayout).setVisibility(View.VISIBLE);
         findViewById(R.id.normallayout).setVisibility(View.GONE);
         MyUpdateQR();
@@ -214,18 +208,18 @@ public class MainActivity extends WearableActivity {
 
     public void SetQRsubtext(String qrtext)
     {
-        TextView qrsubtext = (TextView) findViewById(R.id.qrdusplaysubtext);
+        TextView qrsubtext = findViewById(R.id.qrdusplaysubtext);
         qrsubtext.setText(qrtext);
     }
 
     public void SetQRImage(Bitmap bitmap)
     {
-        ImageView qrdisplay = (ImageView) findViewById(R.id.qrdisplay);
+        ImageView qrdisplay = findViewById(R.id.qrdisplay);
         qrdisplay.setImageBitmap(bitmap);
     }
 
     public void ClickConnect(View view) {
-        mButton.setVisibility(View.GONE);
+        mButton.setVisibility(View.INVISIBLE);
 
         SetError("");
         SetStatus("Switching to QR display");
@@ -246,6 +240,10 @@ public class MainActivity extends WearableActivity {
         {
             mQRupdater.cancel(true);
         }
+        findViewById(R.id.qrlayout).setVisibility(View.GONE);
+        findViewById(R.id.normallayout).setVisibility(View.VISIBLE);
+        SetStatus("Canceled QR Display");
+        mButton.setVisibility(View.VISIBLE);
     }
 
     public void LogUI(String str) {

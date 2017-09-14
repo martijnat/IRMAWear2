@@ -59,6 +59,11 @@ public class AsyncQRUpdate  extends AsyncTask<String, Void, String> {
     }
 
     protected String doInBackground(String... arguments) {
+        if (mMainActivity.QRcreated)
+        {
+            qrtext = mMainActivity.qrcode;
+            return "QR already generated";
+        }
         Log.i(TAG, "started async QR");
         qrtext = MyIPAdress() + " " + Integer.toString(PORT) + "\n\n\n";
         Log.i(TAG, "QR: generated ip string");
@@ -90,6 +95,12 @@ public class AsyncQRUpdate  extends AsyncTask<String, Void, String> {
     }
 
     protected void onPostExecute(String result) {
+        if (mMainActivity.QRcreated)
+        {
+            return;
+        }
+        mMainActivity.QRcreated = true;
+        mMainActivity.qrcode = qrtext;
         Log.i(TAG, "QR: F1");
         mMainActivity.LogUI(qrtext);
         Log.i(TAG, "QR: F2");

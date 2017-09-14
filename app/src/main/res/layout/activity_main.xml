@@ -104,6 +104,32 @@
           android:layout_margin="20dp"
           />
 
+
+      <Button
+          android:id="@+id/connectButton"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textAllCaps="false"
+          android:visibility="invisible"
+          android:text="Connect!"
+          android:onClick="ClickConnect"
+          android:background="@drawable/whiteshaperounded"
+          android:textColor="@color/primary"
+          android:shape="rectangle"
+          android:layout_gravity="center"
+          />
+
+      <TextView
+          android:id="@+id/status"
+          android:layout_width="180dp"
+          android:layout_height="80dp"
+          android:textColor="@color/zxing_status_text"
+          android:text="Loading ..."
+          app:layout_box="all"
+          android:layout_gravity="center"
+          android:padding="5dp"
+          />
+
       <TextView
           android:id="@+id/error"
           android:layout_width="wrap_content"
@@ -117,30 +143,6 @@
           android:layout_marginTop="-15dp"
           android:layout_marginRight="5dp"
           android:layout_marginBottom="0dp"
-          />
-
-      <Button
-          android:id="@+id/connectButton"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:textAllCaps="false"
-          android:visibility="gone"
-          android:text="Connect!"
-          android:onClick="ClickConnect"
-          android:background="@drawable/whiteshaperounded"
-          android:textColor="@color/primary"
-          android:shape="rectangle"
-          android:layout_gravity="center"
-          />
-
-      <TextView
-          android:id="@+id/status"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:textColor="@color/zxing_status_text"
-          android:text="Loading ..."
-          app:layout_box="all"
-          android:layout_gravity="center"
           />
 
       <HorizontalScrollView
