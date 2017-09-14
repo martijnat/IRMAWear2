@@ -32,22 +32,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:padding="0dp" />
+        android:padding="0dp"/>
 
     <TextView
         android:id="@+id/qrdusplaysubtext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/zxing_status_text"
-        android:text="Listening ..."
+        android:text="Generating QR code"
         app:layout_box="all"
         android:textSize="11sp"
+        android:onClick="QuitConnect"
+        android:clickable="true"
         android:layout_gravity="center"
-        android:layout_marginTop="-13dp"
+        android:layout_marginTop="-187dp"
+        android:layout_marginBottom="0dp"
         />
-
-
-
 
   </LinearLayout>
 

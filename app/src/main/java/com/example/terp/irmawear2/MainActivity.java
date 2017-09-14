@@ -198,7 +198,7 @@ public class MainActivity extends WearableActivity {
         System.exit(0);
     }
 
-       public void DisplayQR()
+    public void DisplayQR()
     {
 
         findViewById(R.id.qrlayout).setVisibility(View.VISIBLE);
@@ -208,8 +208,6 @@ public class MainActivity extends WearableActivity {
 
     public void MyUpdateQR()
     {
-
-
         mQRupdater = new AsyncQRUpdate(MainActivity.this);
         mQRupdater.execute();
     }
@@ -236,6 +234,18 @@ public class MainActivity extends WearableActivity {
         mBackgroundClient = new BackgroundClient(MainActivity.this);
         mBackgroundClient.execute();
 
+    }
+
+    public void QuitConnect(View view)
+    {
+        if (mBackgroundClient != null)
+        {
+            mBackgroundClient.cancel(true);
+        }
+        if (mQRupdater != null)
+        {
+            mQRupdater.cancel(true);
+        }
     }
 
     public void LogUI(String str) {
