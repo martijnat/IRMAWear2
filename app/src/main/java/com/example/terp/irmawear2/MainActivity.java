@@ -103,7 +103,7 @@ public class MainActivity extends WearableActivity {
     private BackgroundClient mBackgroundClient;
     private AsyncQRUpdate mQRupdater;
 
-    public static Boolean DEBUGUI = true;
+    public static Boolean DEBUGUI = false;
 
     // variable from android app
     private static final String TAG = "SmartWatchMainActivity";
@@ -219,8 +219,8 @@ public class MainActivity extends WearableActivity {
     }
 
     public void ClickConnect(View view) {
+        findViewById(R.id.MainScrollView).setScrollY(0);
         mButton.setVisibility(View.INVISIBLE);
-
         SetError("");
         SetStatus("Switching to QR display");
         DisplayQR();
@@ -240,6 +240,7 @@ public class MainActivity extends WearableActivity {
         {
             mQRupdater.cancel(true);
         }
+        findViewById(R.id.MainScrollView).setScrollY(0);
         findViewById(R.id.qrlayout).setVisibility(View.GONE);
         findViewById(R.id.normallayout).setVisibility(View.VISIBLE);
         SetStatus("Canceled QR Display");
@@ -252,8 +253,8 @@ public class MainActivity extends WearableActivity {
 
     }
     public void SetStatus(String str) {
+        findViewById(R.id.MainScrollView).setScrollY(0);
         mStatus.setText(str);
-
     }
 
     public void SetError(String str) {
@@ -269,6 +270,7 @@ public class MainActivity extends WearableActivity {
 
     public String WifiInput(String result)
     {
+        findViewById(R.id.MainScrollView).setScrollY(0);
         findViewById(R.id.qrlayout).setVisibility(View.GONE);
         findViewById(R.id.normallayout).setVisibility(View.VISIBLE);
         SetStatus("Processing input ...");
